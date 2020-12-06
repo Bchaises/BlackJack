@@ -82,6 +82,25 @@ if (isset($_POST['btnMise'])) {
 }
 
 // Choix du joueur
+if (isset($btnSubmitChoice)) {
+
+	if ($_POST['radioChoice']) {
+
+		if ($_POST['radioChoice'] == "draw") {
+
+			$nbrRand = rand(1,52);
+			while ($daoGame->verifyCard($nbrRand,$_SESSION['useCards']) == true) {
+				$nbrRand = rand(1,52);
+			}
+
+			$_SESSION['valueP'] = $_SESSION['valueP'] + ($daoGame->valueCard($nbrRand));
+			$_SESSION['carteP3'] = $nbrRand;
+		}
+	}
+}
+else{
+	$messageErreur="Veuillez faire un choix parmis les quatres proposés pour continuer.";
+}
 
 // distribution des cartes pour le croupier et le joueur
 if ($module == 'distribCartes') {
@@ -141,30 +160,52 @@ if ($module == 'distribCartes') {
 		53 => 'dos',
 	);
 
-	$valueP = 0;
 	$carteP = '';
-	$valueC = 0;
 	$carteC = '';
+	$_SESSION['nbrP'] = 0;
+	$_SESSION['nbrC'] = 0;
+	$_SESSION['useCards'] = array();
+
 
 	// carte du joueur
-	for ($i=1; $i <=2 ; $i++) { 
+	$nbrRand = rand(1,52);
+	$_SESSION['carteP1'] = $nbrRand;
+	$_SESSION['valueP'] = $_SESSION['valueP'] + ($daoGame->valueCard($nbrRand));
+	$_SESSION['nbrP'] = $_SESSION['nbrP'] + 1;
+	array_push($_SESSION['useCards'], $nbrRand);
 
+	$nbrRand = rand(1,52);
+	while ($daoGame->verifyCard($nbrRand,$_SESSION['useCards']) == true) {
 		$nbrRand = rand(1,52);
-		$valueP = $valueP + ($daoGame->valueCard($nbrRand));
-		$_SESSION['carteP'.$i] = $nbrRand;
 	}
-
-	$_SESSION['valueP'] = $valueP;
+	$_SESSION['carteP2'] = $nbrRand;
+	$_SESSION['valueP'] = $_SESSION['valueP'] + ($daoGame->valueCard($nbrRand));
+	$_SESSION['nbrP'] = $_SESSION['nbrP'] + 1;
+	array_push($_SESSION['useCards'], $nbrRand);
 
 	// carte du croupier
 	$nbrRand = rand(1,52);
-	$valueC = $valueC + ($daoGame->valueCard($nbrRand));
-
-	$_SESSION['carteC1'] = $nbrRand;
-	$_SESSION['valueC'] = $valueC;
+	while ($daoGame->verifyCard($nbrRand,$_SESSION['useCards']) == true) {
+		$nbrRand = rand(1,52);
+	}
+	$_SESSION['carteC1'] = 53;
+	$_SESSION['nbrP'] = $_SESSION['nbrC'] + 1;
+	$_SESSION['carteC2'] = $nbrRand;
+	$_SESSION['valueC'] = $_SESSION['valueC'] + ($daoGame->valueCard($nbrRand));
+	$_SESSION['nbrP'] = $_SESSION['nbrC'] + 1;
+	array_push($_SESSION['useCards'], $nbrRand);
 }
 
-// Carte du croupier
+// affichage des cartes
+$affichageP = '';
+for ($i=1; $i <= $_SESSION['nbrP']; $i++) {
+	$affichageP .= '<img src="../Images/'.$_SESSION['carteP'.$i].'.png">';
+}
+
+$affichageC = '';
+for ($i=1; $i <= $_SESSION['nbrC']; $i++) { 
+	$affichageC .= '<img src="../Images/'.$_SESSION['carteC'.$i].'.png">';
+}
 
 include('../Vue/top_page.php');
 include('../Vue/header.php');
@@ -187,6 +228,11 @@ else if ($module == 'distribCartes') {
 	include('../Vue/transition.php');
 	include('../Vue/distribCartes.php');
 	include('../Vue/choix.php');
+}
+else if ($module == 'draw') {
+	include('../Vue/info.php');
+	include('../Vue/transition.php');
+	include('../Vue/draw.php');
 }
 
 // message d'erreur

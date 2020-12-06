@@ -124,4 +124,15 @@ class DAO_Game
 		$value = $cartes[$nombre];
 		return $value;
 	}
+
+	public function verifyCard($carte,$useCards){
+
+		for ($i=0; $i < count($useCards); $i++) { 
+			if ($carte == $useCards[$i]) {
+				return true;
+				exit();
+			}
+		}
+		return false;
+	}
 }
