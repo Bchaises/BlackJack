@@ -6,11 +6,13 @@
 	<tr>
 		<td>
 			<p>La main du croupier :</p>
-			<?=$affichageC?>
+			<?= $affichageC;?>
+			<?= '<p>Valeur : '.$_SESSION['valueC'].'</p>';?>
 		</td>
 		<td>
 			<p>Votre main :</p>
-			<?= $affichageP?>
+			<?= $affichageP;?>
+			<?= '<p>Valeur : '.$_SESSION['valueP'].'</p>';?>
 		</td>
 	</tr>
 </table>

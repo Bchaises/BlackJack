@@ -45,6 +45,12 @@ if (isset($_GET['inscription'])) {
 	$module = 'inscription';
 }
 
+// bouton continuer
+if (isset($_GET['continuer'])) {
+	header('location:index.php');
+	$module = 'continuer';
+}
+
 // inscription de l'utilisateur
 if (isset($_POST['btnInscription'])) {
 
@@ -82,24 +88,100 @@ if (isset($_POST['btnMise'])) {
 }
 
 // Choix du joueur
-if (isset($btnSubmitChoice)) {
+if (isset($_POST['btnChoiceSubmit'])) {
 
-	if ($_POST['radioChoice']) {
+	if (isset($_POST['radioChoice'])) {
 
-		if ($_POST['radioChoice'] == "draw") {
+		if ($_POST['radioChoice'] == "draw" ) {
 
 			$nbrRand = rand(1,52);
 			while ($daoGame->verifyCard($nbrRand,$_SESSION['useCards']) == true) {
 				$nbrRand = rand(1,52);
 			}
 
-			$_SESSION['valueP'] = $_SESSION['valueP'] + ($daoGame->valueCard($nbrRand));
-			$_SESSION['carteP3'] = $nbrRand;
+			$_SESSION['valueP'] += ($daoGame->valueCard($nbrRand));
+			$_SESSION['nbrP'] += 1;
+			$_SESSION['carteP'.$_SESSION['nbrP']] = $nbrRand;
+			array_push($_SESSION['useCards'], $nbrRand);
+
+			$nbrRand = rand(1,52);
+			while ($daoGame->verifyCard($nbrRand,$_SESSION['useCards']) == true) {
+				$nbrRand = rand(1,52);
+			}
+
+			if ($_SESSION['valueP'] > 21) {
+				$module= 'finPartie';
+			}
+			else{
+				$module = 'game';
+			}
+
 		}
+
+		if ($_POST['radioChoice'] == 'past') {
+			
+			$nbrRand = rand(1,52);
+			while ($daoGame->verifyCard($nbrRand,$_SESSION['useCards']) == true) {
+			$nbrRand = rand(1,52);
+			}
+			$_SESSION['carteC1'] = $nbrRand;
+			array_push($_SESSION['useCards'], $nbrRand);
+
+			while ($_SESSION['valueC'] < 16) {
+				$nbrRand = rand(1,52);
+				while ($daoGame->verifyCard($nbrRand,$_SESSION['useCards']) == true) {
+				$nbrRand = rand(1,52);
+				}
+				$_SESSION['nbrC'] += 1;
+				$_SESSION['carteC'.$_SESSION['nbrC']] = $nbrRand;
+				$_SESSION['valueC'] += ($daoGame->valueCard($nbrRand));
+				array_push($_SESSION['useCards'], $nbrRand);
+			}
+
+			$module = "finPartie";
+		}
+
+		if ($_POST['radioChoice'] == 'double') {
+			
+			$_SESSION['mise'] *= 2;
+			$_SESSION['money'] = ($_SESSION['money'] - $_SESSION['mise']);
+			$daoPlayer->updatePlayer($_SESSION['pseudo'],$_SESSION['money']);
+
+			$module = 'game';
+		}
+
+	}else{
+		$messageErreur="Veuillez faire un choix parmis les quatres proposés pour continuer.";
 	}
 }
-else{
-	$messageErreur="Veuillez faire un choix parmis les quatres proposés pour continuer.";
+
+if ($module == 'finPartie') {
+	if ($_SESSION['valueP']>21) {
+		$message = 'Vous avez perdu. Votre mise de '.$_SESSION['mise'].'€ a été retiré. Merci d\'avoir joué';
+	}
+	else if ($_SESSION['valueP'] > $_SESSION['valueC']) {
+		$message = 'Vous avez gagné! Vous récupérez donc votre mise plus 1x votre mise.';
+		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + $_SESSION['mise'] * 2));
+	}
+	else if ($_SESSION['valueC'] > $_SESSION['valueP']) {
+		$message = 'Vous avez perdu. Votre mise de '.$_SESSION['mise'].'€ a été retiré. Merci d\'avoir joué';
+	}
+	else{
+		$message = "C'est une égalité! vous récupérez votre mise.";
+		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + $_SESSION['mise']));
+	}
+}
+
+if ($module == 'continuer') {
+	for ($i=0; $i < $_SESSION['nbrP']; $i++) { 
+			unset($_SESSION['carteP'.$i]);
+		}
+		for ($i=0; $i < $_SESSION['nbrC']; $i++) { 
+			unset($_SESSION['carteC'.$i]);
+		}
+		unset($_SESSION['nbrP'], $_SESSION['nbrC'], $_SESSION['useCards'], $_SESSION['valueP'], $_SESSION['valueC']);
+
+		$module = 'connection';
 }
 
 // distribution des cartes pour le croupier et le joueur
@@ -170,8 +252,10 @@ if ($module == 'distribCartes') {
 	// carte du joueur
 	$nbrRand = rand(1,52);
 	$_SESSION['carteP1'] = $nbrRand;
-	$_SESSION['valueP'] = $_SESSION['valueP'] + ($daoGame->valueCard($nbrRand));
-	$_SESSION['nbrP'] = $_SESSION['nbrP'] + 1;
+	$_SESSION['valueP'] = 0;
+	$_SESSION['valueC'] = 0;
+	$_SESSION['valueP'] += ($daoGame->valueCard($nbrRand));
+	$_SESSION['nbrP'] += 1;
 	array_push($_SESSION['useCards'], $nbrRand);
 
 	$nbrRand = rand(1,52);
@@ -179,8 +263,8 @@ if ($module == 'distribCartes') {
 		$nbrRand = rand(1,52);
 	}
 	$_SESSION['carteP2'] = $nbrRand;
-	$_SESSION['valueP'] = $_SESSION['valueP'] + ($daoGame->valueCard($nbrRand));
-	$_SESSION['nbrP'] = $_SESSION['nbrP'] + 1;
+	$_SESSION['valueP'] += ($daoGame->valueCard($nbrRand));
+	$_SESSION['nbrP'] += 1;
 	array_push($_SESSION['useCards'], $nbrRand);
 
 	// carte du croupier
@@ -189,22 +273,24 @@ if ($module == 'distribCartes') {
 		$nbrRand = rand(1,52);
 	}
 	$_SESSION['carteC1'] = 53;
-	$_SESSION['nbrP'] = $_SESSION['nbrC'] + 1;
+	$_SESSION['nbrC'] += 1;
 	$_SESSION['carteC2'] = $nbrRand;
-	$_SESSION['valueC'] = $_SESSION['valueC'] + ($daoGame->valueCard($nbrRand));
-	$_SESSION['nbrP'] = $_SESSION['nbrC'] + 1;
+	$_SESSION['valueC'] += ($daoGame->valueCard($nbrRand));
+	$_SESSION['nbrC'] += 1;
 	array_push($_SESSION['useCards'], $nbrRand);
 }
 
 // affichage des cartes
-$affichageP = '';
-for ($i=1; $i <= $_SESSION['nbrP']; $i++) {
-	$affichageP .= '<img src="../Images/'.$_SESSION['carteP'.$i].'.png">';
-}
+if ($module == 'distribCartes' || $module == 'game' || $module == 'finPartie') {
+	$affichageP = '';
+	for ($i=1; $i <= $_SESSION['nbrP']; $i++) {
+		$affichageP .= '<img src="../Images/'.$_SESSION['carteP'.$i].'.png">';
+	}
 
-$affichageC = '';
-for ($i=1; $i <= $_SESSION['nbrC']; $i++) { 
-	$affichageC .= '<img src="../Images/'.$_SESSION['carteC'.$i].'.png">';
+	$affichageC = '';
+	for ($i=1; $i <= $_SESSION['nbrC']; $i++) { 
+		$affichageC .= '<img src="../Images/'.$_SESSION['carteC'.$i].'.png">';
+	}
 }
 
 include('../Vue/top_page.php');
@@ -226,13 +312,23 @@ else if($module == 'mise'){
 else if ($module == 'distribCartes') {
 	include('../Vue/info.php');
 	include('../Vue/transition.php');
-	include('../Vue/distribCartes.php');
+	include('../Vue/showCards.php');
 	include('../Vue/choix.php');
 }
-else if ($module == 'draw') {
+else if ($module == 'game') {
 	include('../Vue/info.php');
 	include('../Vue/transition.php');
-	include('../Vue/draw.php');
+	include('../Vue/showCards.php');
+	include('../Vue/choix.php');
+}
+else if ($module == 'finPartie') {
+	include('../Vue/info.php');
+	include('../Vue/transition.php');
+	include('../Vue/showCards.php');
+	include('../Vue/lienFin.php');
+}
+else{
+	echo "ERROR404";
 }
 
 // message d'erreur
