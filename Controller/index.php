@@ -166,7 +166,7 @@ if (isset($_POST['btnChoiceSubmit'])) {
 			array_push($_SESSION['useCards'], $nbrRand);
 
 			// tant que la valeur des cartes du croupier n'est pas égale ou superieur a 16 alors il pioche
-			while ($_SESSION['valueC'] < 16) {
+			while ($_SESSION['valueC'] <= 16) {
 
 				// on vérifie si la carte existe
 				$nbrRand = rand(1,52);
