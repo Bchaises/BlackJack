@@ -105,7 +105,7 @@ button{
 
 }
 .formChoice{
-	margin-top: 10%;
+	margin-top: 5%;
 	margin-left: 30%;
 	margin-right: 30%;
 	border:5px black dashed;
@@ -117,6 +117,12 @@ button{
 	padding: 1em;
 }
 .buttonChoiceSubmit{
+	margin-top: -1em;
+	margin-bottom: 1em;
+	background-color: black;
+	color: #FFD700;
+}
+.btnContinue{
 	margin-top: -1em;
 	margin-bottom: 1em;
 	background-color: black;

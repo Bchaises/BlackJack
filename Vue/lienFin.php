@@ -1,1 +1,1 @@
-<a href="index.php?continuer" class="continuer">Continuer</a>.</p>
+<a href="index.php?continuer" ><button class="btnContinue">Continuer</button></a>

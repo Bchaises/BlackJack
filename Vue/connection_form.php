@@ -1,3 +1,4 @@
+<h4>Connexion :</h4>
 <form action='index.php' method='post'>
 	<table class="tableConnection">
 		<tr>

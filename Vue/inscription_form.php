@@ -1,3 +1,4 @@
+<h4>Inscription :</h4>
 <form method="post" action="index.php">
 	<table class="tableInscription">
 		<tr>
@@ -8,11 +9,6 @@
 		<tr>
 			<td>
 				<input type="password" name="password" class="inscriptionPassword" placeholder="Mot de passe" required>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<input type="text" name="money" class="inscriptionMoney" placeholder="Argent" required>
 			</td>
 		</tr>
 	</table>

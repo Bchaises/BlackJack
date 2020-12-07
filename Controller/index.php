@@ -29,34 +29,17 @@ if (isset($_POST['btnConnection'])) {
 	}
 }
 
-// le joueur est déjà connecté
-if(isset($_SESSION['pseudo'])){
-	$module = 'mise';
-}
-
-// deconnexion du joueur
-if (isset($_GET['deco'])) {
-	unset($_SESSION['id'], $_SESSION['pseudo'], $_SESSION['money']);
-	$module = 'connection';
-}
-
 // inscription du joueur
 if (isset($_GET['inscription'])) {
 	$module = 'inscription';
 }
 
-// bouton continuer
-if (isset($_GET['continuer'])) {
-	header('location:index.php');
-	$module = 'continuer';
-}
-
 // inscription de l'utilisateur
 if (isset($_POST['btnInscription'])) {
 
-	if (isset($_POST['pseudo']) && isset($_POST['password']) && isset($_POST['money']) && $_POST['pseudo'] != '' && $_POST['password'] != '' && $_POST['money'] != '' && $_POST['money'] >= 0) {
+	if (isset($_POST['pseudo']) && isset($_POST['password']) && $_POST['pseudo'] != '' && $_POST['password'] != '') {
 
-		if ($daoPlayer->addPlayer($_POST['pseudo'],$_POST['password'],$_POST['money'])) {
+		if ($daoPlayer->addPlayer($_POST['pseudo'],$_POST['password'],1000)) {
 
 			$res =  $daoPlayer->connectPlayer($_POST['pseudo'], $_POST['password']);
 		}
@@ -71,26 +54,54 @@ if (isset($_POST['btnInscription'])) {
 	}
 }
 
+// le joueur est déjà connecté
+if(isset($_SESSION['pseudo'])){
+	$module = 'mise';
+}
+
+// deconnexion du joueur
+if (isset($_GET['deco'])) {
+	unset($_SESSION['id'], $_SESSION['pseudo'], $_SESSION['money']);
+	$module = 'connection';
+}
+
+// bouton continuer
+if (isset($_GET['continuer'])) {
+	header('location:index.php');
+	$module = 'continuer';
+}
+
+// bouton arrêt
+if (isset($_POST['btnStop'])) {
+	$module = 'finPartie';
+}
+
+
 // Mise
 if (isset($_POST['btnMise'])) {
-	if (isset($_POST['mise']) && $_POST['mise'] > 0) {
+
+	if (isset($_POST['mise']) && $_POST['mise'] >= 2 && $_POST['mise'] <= 100 && $_POST['mise'] <= $_SESSION['money']) {
 
 		$_SESSION['mise'] = $_POST['mise'];
 		$_SESSION['money'] = ($_SESSION['money'] - $_SESSION['mise']);
 		$daoPlayer->updatePlayer($_SESSION['pseudo'],$_SESSION['money']);
 
 		$module = 'distribCartes';
-	}
-	else
-	{
-		$messageErreur = "La mise n'est pas correcte !";
+	}else if ($_POST['mise'] < 0) {
+		$messageErreur = "Erreur vous avez saisie une valeur négative.";
+	}else if ($_POST['mise'] > 100) {
+		$messageErreur = "Votre mise doit être comprise entre 2€ et 100€.";
+	}else if ($_POST['mise'] > $_SESSION['money']) {
+		$messageErreur = "Erreur la mise est supérieur à votre solde.";
+	}else{
+		$messageErreur = "Erreur lors de la saisie de votre mise.";
 	}
 }
 
 // Choix du joueur
 if (isset($_POST['btnChoiceSubmit'])) {
 
-	if (isset($_POST['radioChoice'])) {
+	if (isset($_POST['radioChoice']) && $_SESSION['valueP']<21) {
 
 		if ($_POST['radioChoice'] == "draw" ) {
 
@@ -104,18 +115,11 @@ if (isset($_POST['btnChoiceSubmit'])) {
 			$_SESSION['carteP'.$_SESSION['nbrP']] = $nbrRand;
 			array_push($_SESSION['useCards'], $nbrRand);
 
-			$nbrRand = rand(1,52);
-			while ($daoGame->verifyCard($nbrRand,$_SESSION['useCards']) == true) {
-				$nbrRand = rand(1,52);
-			}
-
-			if ($_SESSION['valueP'] > 21) {
-				$module= 'finPartie';
-			}
-			else{
+			if ($_SESSION['valueP'] > 21 || $_SESSION['valueP'] == 21) {
+				$module = 'finPartie';
+			}else{
 				$module = 'game';
 			}
-
 		}
 
 		if ($_POST['radioChoice'] == 'past') {
@@ -138,18 +142,34 @@ if (isset($_POST['btnChoiceSubmit'])) {
 				array_push($_SESSION['useCards'], $nbrRand);
 			}
 
-			$module = "finPartie";
+			$module = 'finPartie';
 		}
 
 		if ($_POST['radioChoice'] == 'double') {
 			
+			$nbrRand = rand(1,52);
+			while ($daoGame->verifyCard($nbrRand,$_SESSION['useCards']) == true) {
+				$nbrRand = rand(1,52);
+			}
+
+			$_SESSION['valueP'] += ($daoGame->valueCard($nbrRand));
+			$_SESSION['nbrP'] += 1;
+			$_SESSION['carteP'.$_SESSION['nbrP']] = $nbrRand;
+			array_push($_SESSION['useCards'], $nbrRand);
+
 			$_SESSION['mise'] *= 2;
 			$_SESSION['money'] = ($_SESSION['money'] - $_SESSION['mise']);
 			$daoPlayer->updatePlayer($_SESSION['pseudo'],$_SESSION['money']);
 
-			$module = 'game';
+			if ($_SESSION['valueP'] > 21 || $_SESSION['valueP'] == 21) {
+				$module = 'finPartie';
+			}else{
+				$module = 'game';
+			}
 		}
 
+	}else if ($_SESSION['valueP'] == 21 || $_SESSION['valueP'] > 21) {
+				$module= 'finPartie';
 	}else{
 		$messageErreur="Veuillez faire un choix parmis les quatres proposés pour continuer.";
 	}
@@ -157,18 +177,31 @@ if (isset($_POST['btnChoiceSubmit'])) {
 
 if ($module == 'finPartie') {
 	if ($_SESSION['valueP']>21) {
-		$message = 'Vous avez perdu. Votre mise de '.$_SESSION['mise'].'€ a été retiré. Merci d\'avoir joué';
+		$message = 'Vous avez perdu. Votre mise de '.$_SESSION['mise'].'€ a été retiré. Merci d\'avoir joué.';
+	}
+	else if ($_SESSION['valueP'] == 21) {
+		$message = 'BlackJack! Vous récupérez 2 fois votre mise.';
+		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + ($_SESSION['mise'] * 2) ));
+		$_SESSION['money'] += $_SESSION['mise'] * 2; 
+	}else if ($_SESSION['valueC']>21) {
+		$message = 'Vous avez gagné! Vous récupérez donc votre mise plus 1x votre mise.';
+		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + ($_SESSION['mise'] * 2) ));
+		$_SESSION['money'] += $_SESSION['mise'] * 2;
+	}else if ($_SESSION['valueC']==21) {
+		$message = 'Vous avez perdu. Votre mise de '.$_SESSION['mise'].'€ a été retiré. Merci d\'avoir joué.';
 	}
 	else if ($_SESSION['valueP'] > $_SESSION['valueC']) {
 		$message = 'Vous avez gagné! Vous récupérez donc votre mise plus 1x votre mise.';
-		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + $_SESSION['mise'] * 2));
+		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + ($_SESSION['mise'] * 2) ));
+		$_SESSION['money'] += $_SESSION['mise'] * 2; 
 	}
 	else if ($_SESSION['valueC'] > $_SESSION['valueP']) {
-		$message = 'Vous avez perdu. Votre mise de '.$_SESSION['mise'].'€ a été retiré. Merci d\'avoir joué';
+		$message = 'Vous avez perdu. Votre mise de '.$_SESSION['mise'].'€ a été retiré. Merci d\'avoir joué.';
 	}
 	else{
 		$message = "C'est une égalité! vous récupérez votre mise.";
 		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + $_SESSION['mise']));
+		$_SESSION['money'] += $_SESSION['mise']; 
 	}
 }
 
