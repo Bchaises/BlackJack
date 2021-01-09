@@ -9,7 +9,7 @@ dans un premier temps renseigner votre mise.</p>
 <form method="POST" action="index.php">
 	<tr>
 		<td>
-			<input type="text" name="mise" class="inputMise" placeholder="Mise" required>
+			<input type="text" name="mise" class="inputMise" placeholder="Mise (2€ - 100€)" required>
 			<button type="submit" name="btnMise" class="valider">Valider</button>
 		</td>
 	</tr>

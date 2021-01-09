@@ -28,11 +28,12 @@ if (isset($_POST['btnConnection'])) {
 		// on utilise la fonction connectPlayer pour connecter le joueur
 		$res = $daoPlayer->connectPlayer($_POST['pseudo'], $_POST['password']);
 
+		$module = 'mise';
+
 		// si res renvoie true alors affichage d'un message d'erreur
 		if ($res != true) {
 
 			$messageErreur = $res;
-			var_dump($messageErreur);
 		}
 	}
 	else
@@ -119,6 +120,61 @@ if (isset($_POST['btnMise'])) {
 	}
 }
 
+// distribution des cartes pour le croupier et le joueur
+if ($module == 'distribCartes') {
+
+	// on initialise les variables session du nombre de cartes pour le croupier et le joueur
+	// ainsi que les variables de valeurs des cartes
+	$_SESSION['cartesP'] = array();
+	$_SESSION['cartesC'] = array();
+	$_SESSION['valueP'] = 0;
+	$_SESSION['valueC'] = 0;
+
+	// on initialise le tableau des cartes utilisés
+	$_SESSION['useCards'] = array();
+
+
+	// donne 2 cartes au joueur
+	$nbrRand = rand(1,52);
+	array_push($_SESSION['cartesP'],$nbrRand);
+	$_SESSION['valueP'] += ($daoGame->valueCard($nbrRand));
+
+	// on met la carte dans le tableau des cartes utilisés
+	array_push($_SESSION['useCards'], $nbrRand);
+
+	// vérification si la carte existe
+	$nbrRand = rand(1,52);
+	while ($daoGame->verifyCard($nbrRand,$_SESSION['useCards']) == true) {
+		$nbrRand = rand(1,52);
+	}
+
+	// donne une deuxieme carte
+	array_push($_SESSION['cartesP'],$nbrRand);
+	$_SESSION['valueP'] += ($daoGame->valueCard($nbrRand));
+
+	// on le met dans le tableau des cartes utilisées
+	array_push($_SESSION['useCards'], $nbrRand);
+
+	// carte du croupier
+	// on vérifie si la carte existe
+	$nbrRand = rand(1,52);
+	while ($daoGame->verifyCard($nbrRand,$_SESSION['useCards']) == true) {
+		$nbrRand = rand(1,52);
+	}
+
+	// on met la carte retourné
+	array_push($_SESSION['cartesC'],53);
+
+	// on met la deuxieme carte
+	array_push($_SESSION['cartesC'],$nbrRand);
+	$_SESSION['valueC'] += ($daoGame->valueCard($nbrRand));
+
+	// on met la carte dans le tableau des cartes utilisées
+	array_push($_SESSION['useCards'], $nbrRand);
+
+	$module = 'game';
+}
+
 // Choix du joueur
 if (isset($_POST['btnChoiceSubmit'])) {
 
@@ -136,8 +192,7 @@ if (isset($_POST['btnChoiceSubmit'])) {
 
 			// on donne alors la valeur de la carte, on l'ajoute dans le nombre de carte du joueur et on ajoute une session avec la carte
 			$_SESSION['valueP'] += ($daoGame->valueCard($nbrRand));
-			$_SESSION['nbrP'] += 1;
-			$_SESSION['carteP'.$_SESSION['nbrP']] = $nbrRand;
+			array_push($_SESSION['cartesP'], $nbrRand);
 
 			// on met la carte d'un le tableau usecards 
 			array_push($_SESSION['useCards'], $nbrRand);
@@ -162,8 +217,10 @@ if (isset($_POST['btnChoiceSubmit'])) {
 			}
 
 			// on change la carte retourné
-			$_SESSION['carteC1'] = $nbrRand;
+			$_SESSION['cartesC'][0] = $nbrRand;
+			$_SESSION['valueC'] += ($daoGame->valueCard($nbrRand)); 
 			array_push($_SESSION['useCards'], $nbrRand);
+			
 
 			// tant que la valeur des cartes du croupier n'est pas égale ou superieur a 16 alors il pioche
 			while ($_SESSION['valueC'] <= 16) {
@@ -175,8 +232,7 @@ if (isset($_POST['btnChoiceSubmit'])) {
 				}
 
 				// on ajoute dans le nombre de cartes du croupier, on ajoute une session avec la carte et la valeur de celle ci
-				$_SESSION['nbrC'] += 1;
-				$_SESSION['carteC'.$_SESSION['nbrC']] = $nbrRand;
+				array_push($_SESSION['cartesC'],$nbrRand);
 				$_SESSION['valueC'] += ($daoGame->valueCard($nbrRand));
 				// on l'ajoute dans usecards
 				array_push($_SESSION['useCards'], $nbrRand);
@@ -198,8 +254,7 @@ if (isset($_POST['btnChoiceSubmit'])) {
 
 			// on ajoute valeur, nombre et carte
 			$_SESSION['valueP'] += ($daoGame->valueCard($nbrRand));
-			$_SESSION['nbrP'] += 1;
-			$_SESSION['carteP'.$_SESSION['nbrP']] = $nbrRand;
+			array_push($_SESSION['cartesP'],$nbrRand);
 
 			// on l'ajoute dans le tableau usecards
 			array_push($_SESSION['useCards'], $nbrRand);
@@ -292,6 +347,7 @@ if ($module == 'finPartie') {
 		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + $_SESSION['mise']));
 		$_SESSION['money'] += $_SESSION['mise']; 
 	}
+
 }
 
 // module continuer
@@ -310,76 +366,21 @@ if ($module == 'continuer') {
 		$module = 'connection';
 }
 
-// distribution des cartes pour le croupier et le joueur
-if ($module == 'distribCartes') {
 
-	// on initialise les variables session du nombre de cartes pour le croupier et le joueur
-	// ainsi que les variables de valeurs des cartes
-	$_SESSION['nbrP'] = 0;
-	$_SESSION['nbrC'] = 0;
-	$_SESSION['valueP'] = 0;
-	$_SESSION['valueC'] = 0;
-
-	// on initialise le tableau des cartes utilisés
-	$_SESSION['useCards'] = array();
-
-
-	// donne 2 cartes au joueur
-	$nbrRand = rand(1,52);
-	$_SESSION['carteP1'] = $nbrRand;
-	$_SESSION['valueP'] += ($daoGame->valueCard($nbrRand));
-	$_SESSION['nbrP'] += 1;
-
-	// on met la carte dans le tableau des cartes utilisés
-	array_push($_SESSION['useCards'], $nbrRand);
-
-	// vérification si la carte existe
-	$nbrRand = rand(1,52);
-	while ($daoGame->verifyCard($nbrRand,$_SESSION['useCards']) == true) {
-		$nbrRand = rand(1,52);
-	}
-
-	// donne une deuxieme carte
-	$_SESSION['carteP2'] = $nbrRand;
-	$_SESSION['valueP'] += ($daoGame->valueCard($nbrRand));
-	$_SESSION['nbrP'] += 1;
-
-	// on le met dans le tableau des cartes utilisées
-	array_push($_SESSION['useCards'], $nbrRand);
-
-	// carte du croupier
-	// on vérifie si la carte existe
-	$nbrRand = rand(1,52);
-	while ($daoGame->verifyCard($nbrRand,$_SESSION['useCards']) == true) {
-		$nbrRand = rand(1,52);
-	}
-
-	// on met la carte retourné
-	$_SESSION['carteC1'] = 53;
-	$_SESSION['nbrC'] += 1;
-
-	// on met la deuxieme carte
-	$_SESSION['carteC2'] = $nbrRand;
-	$_SESSION['valueC'] += ($daoGame->valueCard($nbrRand));
-	$_SESSION['nbrC'] += 1;
-
-	// on met la carte dans le tableau des cartes utilisées
-	array_push($_SESSION['useCards'], $nbrRand);
-}
 
 // affichage des cartes
 if ($module == 'distribCartes' || $module == 'game' || $module == 'finPartie') {
 
 	// affichage des images du joueur
 	$affichageP = '';
-	for ($i=1; $i <= $_SESSION['nbrP']; $i++) {
-		$affichageP .= '<img src="../Images/'.$_SESSION['carteP'.$i].'.png">';
+	for ($i=0; $i < count($_SESSION['cartesP']); $i++) {
+		$affichageP .= '<img src="../Images/'.$_SESSION['cartesP'][$i].'.png">';
 	}
 
 	// affichage des images du croupier
 	$affichageC = '';
-	for ($i=1; $i <= $_SESSION['nbrC']; $i++) { 
-		$affichageC .= '<img src="../Images/'.$_SESSION['carteC'.$i].'.png">';
+	for ($i=0; $i < count($_SESSION['cartesC']); $i++) { 
+		$affichageC .= '<img src="../Images/'.$_SESSION['cartesC'][$i].'.png">';
 	}
 }
 
