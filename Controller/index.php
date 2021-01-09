@@ -207,7 +207,7 @@ if (isset($_POST['btnChoiceSubmit'])) {
 		}
 
 		// si le bouton past/passé la main a été selectionné
-		if ($_POST['radioChoice'] == 'past') {
+		if ($_POST['radioChoice'] == 'past' && $_SESSION['cartesC'][0] == 53) {
 			
 			// c'est le tour du croupier
 			// on vérifie que la carte existe
@@ -406,7 +406,6 @@ else if ($module == 'distribCartes') {
 	include('../Vue/info.php');
 	include('../Vue/transition.php');
 	include('../Vue/showCards.php');
-	include('../Vue/choix.php');
 }
 else if ($module == 'game') {
 	include('../Vue/info.php');
