@@ -259,11 +259,11 @@ if (isset($_POST['btnChoiceSubmit'])) {
 			// on l'ajoute dans le tableau usecards
 			array_push($_SESSION['useCards'], $nbrRand);
 
+			// on modifie le solde du joueur une seconde fois
+			$_SESSION['money'] = ($_SESSION['money'] - $_SESSION['mise']);
+
 			// on modifie la mise en la multipliant pas deux
 			$_SESSION['mise'] *= 2;
-
-			// on modifie le solde du joueur
-			$_SESSION['money'] = ($_SESSION['money'] - $_SESSION['mise']);
 
 			// le solde du joueur est modifier dans la base de données
 			$daoPlayer->updatePlayer($_SESSION['pseudo'],$_SESSION['money']);
