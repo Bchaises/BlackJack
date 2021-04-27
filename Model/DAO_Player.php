@@ -22,7 +22,7 @@ class DAO_Player
 		$req->execute([$id]);
 
 		$data = $req->fetch();
-		if ($user != null) {
+		if ($data != null) {
 
 			$id = $data['id'];
 			$pseudo = $data['pseudo'];
@@ -57,6 +57,26 @@ class DAO_Player
 			return $player;
 		}
 		else
+		{
+			return null;
+		}
+	}
+
+	// fonction pour obtenir l'argent de l'utilisateur
+	public function getMoneyByPseudo($pseudo)
+	{
+		$sql = 'SELECT money FROM player WHERE pseudo = ?';
+		$req = $this->bdd->prepare($sql);
+		$req->execute([$pseudo]);
+
+		$data = $req->fetch();
+		if ($data != null) {
+
+			$money = $data['money'];
+
+			return $money;
+		}
+		else 
 		{
 			return null;
 		}

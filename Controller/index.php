@@ -28,6 +28,9 @@ if (isset($_POST['btnConnection'])) {
 		// on utilise la fonction connectPlayer pour connecter le joueur
 		$res = $daoPlayer->connectPlayer($_POST['pseudo'], $_POST['password']);
 
+		$_SESSION['pseudo'] = $_POST['pseudo'];
+		$_SESSION['money'] = $daoPlayer->getMoneyByPseudo($_POST['pseudo']);
+
 		$module = 'mise';
 
 		// si res renvoie true alors affichage d'un message d'erreur
@@ -259,12 +262,20 @@ if (isset($_POST['btnChoiceSubmit'])) {
 			// on l'ajoute dans le tableau usecards
 			array_push($_SESSION['useCards'], $nbrRand);
 
+<<<<<<< Updated upstream
 			// on modifie le solde du joueur une seconde fois
+=======
+			// on modifie le solde du joueur
+>>>>>>> Stashed changes
 			$_SESSION['money'] = ($_SESSION['money'] - $_SESSION['mise']);
 
 			// on modifie la mise en la multipliant pas deux
 			$_SESSION['mise'] *= 2;
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 			// le solde du joueur est modifier dans la base de données
 			$daoPlayer->updatePlayer($_SESSION['pseudo'],$_SESSION['money']);
 
@@ -329,7 +340,7 @@ if ($module == 'finPartie') {
 
 		// on modifie le solde
 		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + ($_SESSION['mise'] * 2) ));
-		$_SESSION['money'] += $_SESSION['mise'] * 2; 
+		$_SESSION['money'] += $_SESSION['mise'] * 2;
 	}
 	// si la valeur du croupier est superieur a celle du joueur
 	else if ($_SESSION['valueC'] > $_SESSION['valueP']) {
@@ -345,7 +356,7 @@ if ($module == 'finPartie') {
 
 		// la mise est récupéré
 		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + $_SESSION['mise']));
-		$_SESSION['money'] += $_SESSION['mise']; 
+		$_SESSION['money'] += $_SESSION['mise'];
 	}
 
 }
