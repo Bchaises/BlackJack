@@ -3,7 +3,7 @@ dans un premier temps renseigner votre mise.</p>
 <table class="tableMise">
 	<tr>
 		<td>
-			<?= 'Solde actuel : <span class="solde">'.$_SESSION['money'].'€</span>';?>
+			<?= 'Solde actuel : <span class="solde">'.htmlspecialchars($_SESSION['money']).'€</span>';?>
 		</td>
 	</tr>
 <form method="POST" action="index.php">
