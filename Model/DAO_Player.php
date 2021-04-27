@@ -62,6 +62,27 @@ class DAO_Player
 		}
 	}
 
+	// fonction pour obtenir l'argent de l'utilisateur
+	public function getMoneyByPseudo($pseudo)
+	{
+		$sql = 'SELECT money FROM player WHERE pseudo = ?';
+		$req = $this->bdd->prepare($sql);
+		$req->execute([$pseudo]);
+
+		$data = $req->fetch();
+		if ($data != null) {
+
+			$money = $data['money'];
+
+			return $money;
+		}
+		else 
+		{
+			return null;
+		}
+	}
+
+
 	// Connexion de l'utilisateur
 	public function connectPlayer($pseudo, $password)
 	{

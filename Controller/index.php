@@ -28,6 +28,9 @@ if (isset($_POST['btnConnection'])) {
 		// on utilise la fonction connectPlayer pour connecter le joueur
 		$res = $daoPlayer->connectPlayer($_POST['pseudo'], $_POST['password']);
 
+		$_SESSION['pseudo'] = $_POST['pseudo'];
+		$_SESSION['money'] = $daoPlayer->getMoneyByPseudo($_POST['pseudo']);
+
 		$module = 'mise';
 
 		// si res renvoie true alors affichage d'un message d'erreur
