@@ -29,11 +29,12 @@ if (isset($_POST['btnConnection'])) {
 		$res = $daoPlayer->connectPlayer($_POST['pseudo'], $_POST['password']);
 		
 		if($res == "connecté"){
+			
+		$_SESSION['pseudo'] = $_POST['pseudo'];
+		$_SESSION['money'] = $daoPlayer->getMoneyByPseudo($_POST['pseudo']);
 
-			$_SESSION['pseudo'] = $_POST['pseudo'];
-			$_SESSION['money'] = $daoPlayer->getMoneyByPseudo($_POST['pseudo']);
+		$module = 'mise';
 
-			$module = 'mise';
 		}
 		// si res renvoie autre que true alors affichage d'un message d'erreur
 		else{
@@ -275,11 +276,11 @@ if (isset($_POST['btnChoiceSubmit'])) {
 			// on l'ajoute dans le tableau usecards
 			array_push($_SESSION['useCards'], $nbrRand);
 
+			// on modifie le solde du joueur une seconde fois
+			$_SESSION['money'] = ($_SESSION['money'] - $_SESSION['mise']);
+
 			// on modifie la mise en la multipliant pas deux
 			$_SESSION['mise'] *= 2;
-
-			// on modifie le solde du joueur
-			$_SESSION['money'] = ($_SESSION['money'] - $_SESSION['mise']);
 
 			// le solde du joueur est modifier dans la base de données
 			$daoPlayer->updatePlayer($_SESSION['pseudo'],$_SESSION['money']);
@@ -305,11 +306,16 @@ if (isset($_POST['btnChoiceSubmit'])) {
 // module fin de partie
 if ($module == 'finPartie') {
 
+	//variable pour avoir le profit
+	$profit = 0;
+
 	// perdu si la valeur du joueur est superieur à 21
 	if ($_SESSION['valueP']>21) {
 
 		// on informe le joueur de la fin de partie ainsi que de la somme perdu
 		$message = 'Vous avez perdu. Votre mise de '.$_SESSION['mise'].'€ a été retiré. Merci d\'avoir joué.';
+
+		$profit = -$_SESSION['mise'];
 	}
 	// blackjack si la valeur du joueur est égale à 21
 	else if ($_SESSION['valueP'] == 21) {
@@ -318,8 +324,10 @@ if ($module == 'finPartie') {
 		$message = 'BlackJack! Vous récupérez 2 fois votre mise.';
 
 		// on modifie le solde du joueur, il a gagné 2 fois la mise
-		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + ($_SESSION['mise'] * 2) ));
-		$_SESSION['money'] += $_SESSION['mise'] * 2; 
+		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + ($_SESSION['mise'] * 3) ));
+		$_SESSION['money'] += $_SESSION['mise'] * 3;
+
+		$profit =  2*$_SESSION['mise'];
 
 	// si la valeur du croupier est superieur a 21
 	}else if ($_SESSION['valueC']>21) {
@@ -331,11 +339,15 @@ if ($module == 'finPartie') {
 		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + ($_SESSION['mise'] * 2) ));
 		$_SESSION['money'] += $_SESSION['mise'] * 2;
 
+		$profit = $_SESSION['mise'];
+
 	// si le croupier a un blackjack
 	}else if ($_SESSION['valueC']==21) {
 
 		// on informe le joueur de la défaite
 		$message = 'Vous avez perdu. Votre mise de '.$_SESSION['mise'].'€ a été retiré. Merci d\'avoir joué.';
+
+		$profit = -$_SESSION['mise'];
 	}
 	// si le joueur a une valeur superieur au croupier
 	else if ($_SESSION['valueP'] > $_SESSION['valueC']) {
@@ -345,13 +357,17 @@ if ($module == 'finPartie') {
 
 		// on modifie le solde
 		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + ($_SESSION['mise'] * 2) ));
-		$_SESSION['money'] += $_SESSION['mise'] * 2; 
+		$_SESSION['money'] += $_SESSION['mise'] * 2;
+
+		$profit = $_SESSION['mise']; 
 	}
 	// si la valeur du croupier est superieur a celle du joueur
 	else if ($_SESSION['valueC'] > $_SESSION['valueP']) {
 
 		// on informe le joueur de la défaite
 		$message = 'Vous avez perdu. Votre mise de '.$_SESSION['mise'].'€ a été retiré. Merci d\'avoir joué.';
+
+		$profit = -$_SESSION['mise'];
 	}
 	// si c'est une égalité
 	else{
@@ -362,7 +378,12 @@ if ($module == 'finPartie') {
 		// la mise est récupéré
 		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + $_SESSION['mise']));
 		$_SESSION['money'] += $_SESSION['mise']; 
+
+		$profit = 0;
 	}
+
+	$player = $daoPlayer->getByPseudo($_SESSION['pseudo']);
+	$daoGame->addGame($player->getId(),$_SESSION['mise'],$profit);
 
 }
 
