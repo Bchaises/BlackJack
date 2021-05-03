@@ -135,7 +135,7 @@ class DAO_Game
 		}
 		return false;
 	}
-	
+
 	// ajout de la partie 
 	public function addGame($id,$bet,$profit){
 
@@ -145,7 +145,7 @@ class DAO_Game
 
 		return true;
 	}
-
+	
 	//renvoie le nombre de parties d'un joueur
 	public function numberGamesById($id){
 		$sql = 'SELECT COUNT(id) FROM game WHERE player = ?';
