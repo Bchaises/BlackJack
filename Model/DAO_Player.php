@@ -22,7 +22,7 @@ class DAO_Player
 		$req->execute([$id]);
 
 		$data = $req->fetch();
-		if ($user != null) {
+		if ($data != null) {
 
 			$id = $data['id'];
 			$pseudo = $data['pseudo'];

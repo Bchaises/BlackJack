@@ -135,4 +135,14 @@ class DAO_Game
 		}
 		return false;
 	}
+
+	// ajout de la partie 
+	public function addGame($id,$bet,$profit){
+
+		$requete = 'INSERT INTO game(player,date,bet,profit) VALUE(?,NOW(),?,?)';
+		$req = $this->bdd->prepare($requete);
+		$req->execute(array($id,$bet,$profit));
+
+		return true;
+	}
 }
