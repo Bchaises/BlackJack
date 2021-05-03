@@ -43,7 +43,7 @@ class DAO_Player
 	{
 		$sql = 'SELECT * FROM player WHERE pseudo = ?';
 		$req = $this->bdd->prepare($sql);
-		$req->execute([$p]);
+		$req->execute(array($p));
 
 		$data = $req->fetch();
 		if ($data != null) {
@@ -68,13 +68,14 @@ class DAO_Player
 		$p = $this->getByPseudo($pseudo);
 
 		if ($p != null) {
+
 			if (password_verify($password, $p->getPassword())) {
 				
 				$_SESSION['id'] = $p->getId();
 				$_SESSION['pseudo'] = $p->getPseudo();
 				$_SESSION['money'] = $p->getMoney();
 
-				return true;
+				return "connecté";
 			}
 			else
 			{

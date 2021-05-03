@@ -27,13 +27,19 @@ if (isset($_POST['btnConnection'])) {
 		
 		// on utilise la fonction connectPlayer pour connecter le joueur
 		$res = $daoPlayer->connectPlayer($_POST['pseudo'], $_POST['password']);
+		
+		if($res == "connecté"){
 
-		$module = 'mise';
+			$_SESSION['pseudo'] = $_POST['pseudo'];
+			$_SESSION['money'] = $daoPlayer->getMoneyByPseudo($_POST['pseudo']);
 
-		// si res renvoie true alors affichage d'un message d'erreur
-		if ($res != true) {
+			$module = 'mise';
+		}
+		// si res renvoie autre que true alors affichage d'un message d'erreur
+		else{
 
 			$messageErreur = $res;
+			$module = "connection";
 		}
 	}
 	else
@@ -91,6 +97,16 @@ if (isset($_GET['continuer'])) {
 // bouton arrêt
 if (isset($_POST['btnStop'])) {
 	$module = 'finPartie';
+}
+
+// page profil
+if (isset($_GET['profil'])) {
+	$module = 'profil';
+}
+
+// retour à la page mise
+if (isset($_GET['mise'])) {
+	$module = 'mise';
 }
 
 
@@ -384,6 +400,26 @@ if ($module == 'distribCartes' || $module == 'game' || $module == 'finPartie') {
 	}
 }
 
+//affichage des parties réalisées
+if ($module == 'profil') {
+	
+	$player = $daoPlayer->getByPseudo($_SESSION['pseudo']);
+	$games = $daoGame->getByPlayer($player->getId());
+	$cpt = $daoGame->numberGamesById($_SESSION['pseudo']);
+
+	var_dump($cpt);
+
+	for ($i=0; $i < $cpt; $i++) { 
+		$parties = "
+		<tr>
+			<td>".$games->getDate()."</td>
+			<td>".$games->getBet()."</td>
+			<td>".$games->getProfit()."</td>
+		</tr>
+		";
+	}
+}
+
 // page html
 include('../Vue/top_page.php');
 include('../Vue/header.php');
@@ -418,6 +454,10 @@ else if ($module == 'finPartie') {
 	include('../Vue/transition.php');
 	include('../Vue/showCards.php');
 	include('../Vue/lienFin.php');
+}
+else if ($module == 'profil'){
+	include('../Vue/info.php');
+	include('../Vue/Profil.php');
 }
 else{
 	echo "ERROR404";

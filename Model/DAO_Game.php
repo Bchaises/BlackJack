@@ -135,4 +135,25 @@ class DAO_Game
 		}
 		return false;
 	}
+	
+	// ajout de la partie 
+	public function addGame($id,$bet,$profit){
+
+		$requete = 'INSERT INTO game(player,date,bet,profit) VALUE(?,NOW(),?,?)';
+		$req = $this->bdd->prepare($requete);
+		$req->execute(array($id,$bet,$profit));
+
+		return true;
+	}
+
+	//renvoie le nombre de parties d'un joueur
+	public function numberGamesById($id){
+		$sql = 'SELECT COUNT(id) FROM game WHERE player = ?';
+		$req = $this->bdd->prepare($sql);
+		$req->execute(array($id));
+
+		$data = $req->fetch();
+
+		return $data;
+	}
 }
