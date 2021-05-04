@@ -1,18 +1,14 @@
-<h4>Inscription :</h4>
-<form method="post" action="index.php">
-	<table class="tableInscription">
-		<tr>
-			<td>
-				<input type="text" name="pseudo" class="inscriptionPseudo" placeholder="Pseudo" required>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<input type="password" name="password" class="inscriptionPassword" placeholder="Mot de passe" required>
-			</td>
-		</tr>
-	</table>
+<div id="formInscription">
+	<h4>Inscription :</h4>
+	<form method="post" action="index.php">
 
-	<button type="submit" name="btnInscription" class="valider">Valider</button>
-	<button type="reset" class="reset">Effacer</button>
-</form>
+		<input type="text" name="pseudo" class="inscriptionPseudo" placeholder="Pseudo" required>
+
+		<input type="password" name="password" class="inscriptionPassword" placeholder="Mot de passe" required>
+
+		<div id="button">
+			<button type="submit" name="btnInscription" class="valider">S'enregistrer</button>
+		</div>
+
+	</form>
+</div>

@@ -117,6 +117,18 @@ if (isset($_GET['recommencer'])) {
 	$module = 'distribCartes';
 }
 
+// l'utilisateur tente d'accéder à profil sans s'être connecté
+if (isset($_GET['profil']) && !isset($_SESSION['pseudo'])) {
+	$module = "connection";
+	$messageErreur = "Veuillez vous connecter avant d'accéder à l'onglet \"Profil\"";
+}
+
+// l'utilisateur tente d'accéder à jouer sans s'être connecté
+if (isset($_GET['mise']) && !isset($_SESSION['pseudo'])) {
+	$module = "connection";
+	$messageErreur = "Veuillez vous connecter avant d'accéder à l'onglet \"Jouer\"";
+}
+
 
 // Mise
 if (isset($_POST['btnMise'])) {
@@ -528,12 +540,25 @@ else{
 
 // message d'erreur
 if ($messageErreur != '') {
-	echo '<br>'.$messageErreur;
+	echo '<br><span style="
+
+	color:red;
+	display: flex;
+	flex-direction:column;
+	align-items: center;
+
+	">'.$messageErreur.".</span>";
 }
 
 // message d'information
 if ($message != '') {
-	echo '<br>'.$message;
+	echo '<br><span style="
+
+	display: flex;
+	flex-direction:column;
+	align-items: center;
+	
+	">'.$message.".</span>";
 }
 
 include('../Vue/bottom_page.php');

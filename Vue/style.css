@@ -83,7 +83,7 @@ header{
 	margin-top: 50px;
 }
 /* Fin de partie */
-#btnAgain, #btnContinue{
+#btnAgain, #btnContinue, #btnMise, #formConnect #button button, #formInscription #button button{
 	font-size: 20px;
 	border: 1px #1b1b1a solid;
 	text-decoration: none;
@@ -93,6 +93,38 @@ header{
 	padding: 5px;
 }
 
+#formMise{
+	display: flex;
+	flex-direction:column;
+	align-items: center;
+}
+
+/* Formulaire de connection */
+#formConnect{
+	display: flex;
+	flex-direction:column;
+	align-items: center;
+}
+#formConnect #button{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	padding-top: 20px;
+}
+
+/* Formulaire d'inscription */
+#formInscription{
+	display: flex;
+	flex-direction:column;
+	align-items: center;
+}
+#formInscription #button{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	padding-top: 20px;
+}
+
 .inputMise, .inscriptionMoney, .inscriptionPassword,.inscriptionPseudo, .connectPassword, .connectPseudo {
 	font-size: 20px;
 	width: 200px;
@@ -100,19 +132,7 @@ header{
 	border-radius: 5px;
 	border: 1px black solid;
 }
-.valider{
-	background-color: black;
-	color: #1d67bf;
-}
-.reset{
-	background-color: black;
-	color: #c44045;
-}
-.tableConnection{
-	border-spacing: 5px;
-	margin: auto;
-	padding: auto;
-}
+
 .tableInscription{
 	border-spacing: 5px;
 	margin: auto;
@@ -216,8 +236,8 @@ header{
     margin-right: auto;
     font-weight: bold;
 }
-.solde{
-	font-size: 25px;
+#solde{
+	font-size: 20px;
     margin-left: auto;
     margin-right: auto;
     font-weight: bold;
