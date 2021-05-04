@@ -1,5 +1,7 @@
 <?php
 
+setlocale(LC_TIME, 'fra', 'fr_FR');
+
 // On ajoute les deux DAO 
 require_once('../Model/DAO_Player.php');
 require_once('../Model/DAO_Game.php');
@@ -425,20 +427,55 @@ if ($module == 'distribCartes' || $module == 'game' || $module == 'finPartie') {
 if ($module == 'profil') {
 	
 	$player = $daoPlayer->getByPseudo($_SESSION['pseudo']);
-	$games = $daoGame->getByPlayer($player->getId());
-	$cpt = $daoGame->numberGamesById($_SESSION['pseudo']);
+	$games = $daoGame->getById($player->getId());
+	$cpt = $daoGame->numberGamesById($player->getId());
 
-	var_dump($cpt);
+	$parties = '';
+	$nbrWin = 0;
+	$winRate = 0;
 
 	for ($i=0; $i < $cpt; $i++) { 
-		$parties = "
-		<tr>
-			<td>".$games->getDate()."</td>
-			<td>".$games->getBet()."</td>
-			<td>".$games->getProfit()."</td>
-		</tr>
+		$date = date_create($games[$i]->getDate());
+
+		$tabJours = ["", "Lundi", "Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
+		$jour = $tabJours[date_format($date, 'N')];
+
+		$tabMois = ["","Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Decembre"];
+		$mois = $tabMois[date_format($date,'n')];
+
+		$dateFormat = $jour." ".date_format($date,'d')." ".$mois." ".date_format($date, 'à g\hi');
+
+		$parties = $parties. "
+		<tr class='row_history'>
+			<td>".$dateFormat."</td>
+			<td>".$games[$i]->getBet()."€</td>
 		";
+
+		if ( ($games[$i]->getProfit()) > 0) {
+			$parties = $parties."<td style='color:green;'>".$games[$i]->getProfit()."€</td>
+				  <td>gagné<td>
+			</tr>
+			";
+
+			$nbrWin++;
+		}
+		else{
+			$parties = $parties."<td style='color:red;'>".$games[$i]->getProfit()."€</td>
+				  <td>perdu<td>
+			</tr>
+			";
+
+		}
 	}
+
+
+	if($nbrWin/$cpt*100 >= 50){
+		$winRate = "<span style='color:green;'>".round($nbrWin/$cpt*100,1)."%</span>";
+	}
+	else{
+		$winRate = "<span style='color:red;'>".round($nbrWin/$cpt*100,1)."%</span>";
+	}
+
 }
 
 // page html

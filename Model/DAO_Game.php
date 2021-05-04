@@ -17,21 +17,28 @@ class DAO_Game
 	// fonction pour obtenir les infos d'une partie par son id
 	public function getById($id)
 	{
-		$sql = 'SELECT * FROM game WHERE id = ?';
+		$sql = 'SELECT * FROM game WHERE player = ?';
 		$req = $this->bdd->prepare($sql);
 		$req->execute([$id]);
 
-		$data = $req->fetch();
-		if ($data != null) {
-			
+		$games = [];
+
+		while ($data = $req->fetch()) {
+
 			$id = $data['id'];
 			$player = $data['player'];
 			$date = $data['date'];
-			$bet = $data['bet'];
-			$profit = $data['profit'];
+			$bet = intval($data['bet']);
+			$profit = intval($data['profit']);
 
 			$game = new DTO_Game($id,$player,$date,$bet,$profit);
-			return $game;
+
+			array_push($games, $game);
+
+		}
+
+		if ($games != null) {
+			return $games;
 		}
 		else
 		{
@@ -40,9 +47,9 @@ class DAO_Game
 	}
 
 	// fonction pour obtenir les infos d'une partie grâce à l'di du player
-	public function getByPlayer($player)
+	public function getByPlayer($pseudo)
 	{
-		$sql = 'SELECT * FROM game WHERE player = ?';
+		$sql = 'SELECT * FROM player,game WHERE id.player = player.game AND pseudo = ?';
 		$req = $this->bdd->prepare($sql);
 		$req->execute([$player]);
 
@@ -152,7 +159,7 @@ class DAO_Game
 		$req = $this->bdd->prepare($sql);
 		$req->execute(array($id));
 
-		$data = $req->fetch();
+		$data = intval($req->fetch()[0]);
 
 		return $data;
 	}

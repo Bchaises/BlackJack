@@ -89,7 +89,7 @@ button{
 .page{
 	background-color: white;
 	width: 1250px;
-	height: 1200px;
+	height: auto;
 	border:5px black solid;
 	margin: auto;
 	padding: auto;
@@ -127,4 +127,54 @@ button{
 	margin-bottom: 1em;
 	background-color: black;
 	color: #FFD700;
+}
+
+/* Profil */
+.history{
+	margin-top: 20px;
+	margin-left: 100px;
+}
+.row_history{
+	text-align: center;
+	border-bottom: solid;
+}
+.title_history{
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+}
+.circle{
+	border: 2px solid #474747;
+    border-radius: 100%;
+    width: 125px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.circle span{
+	font-size: 1.6em;
+}
+.containerProfil{
+	display: flex;
+	align-items: flex-start;
+}
+.win_rate{
+	margin-left: auto;
+    margin-right: auto;
+}
+.win_rate p{
+	font-size: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: bold;
+}
+.solde{
+	font-size: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: bold;
 }
