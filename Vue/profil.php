@@ -20,6 +20,6 @@
 	</div>
 
 	<div class="solde">
-		<p>Solde : <?=$_SESSION['money'];?></p>
+		<p>Solde : <?=$_SESSION['money'];?>€</p>
 	</div>
 </div>

@@ -4,56 +4,101 @@
          url('../font/stay_classy_sldt-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-
 }
+
+@font-face {
+    font-family: 'Roboto';
+    src : url('../font/Roboto/Roboto-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Avenir Next Regular';
+    src : url('../font/Avenir_Next/AvenirNextLTPro-Regular.otf');
+}
+
 body {
-	text-align: center;
-	background-image: url('../Images/casino-10.jpg');
 	background-color: white;
-	font-size: 25px;
-	font-family: sans-serif;
+	font-size: 20px;
+	font-family: "Avenir Next Regular";
 }
 header{
-	background-image: url('../Images/bannière.jpg');
-	border: 5px black solid;
-	border-radius: 5px;
-	width: 1240px;
-	height: 225px;
+	background-color: white;
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
 }
-.deco{
-	border: 5px black solid;
+
+/* Menu Header */
+.menu a{
 	text-decoration: none;
-	color: #FFD700;
-	background-color: black;
-	border-radius: 5px;
+	color: white;
+
 }
+.menu ul{
+	list-style: none;
+
+	display: flex;
+	flex-direction:row;
+	align-items: center;
+	justify-content: center;
+
+	padding: 20px;
+}
+.menu ul li{
+	padding-left: 20px;
+	padding-right: 20px;
+}
+.menu #menu_item_1, .menu #menu_item_2, .menu #menu_item_3{
+	border-right:1px solid white;
+}
+.menu hr{
+	padding: 0;
+}
+.menu{
+	background-color: #1b1b1a;
+}
+
+/* info */
+#info{
+	position: absolute;
+	top:0;
+	right: 20px;
+}
+#deco{
+	border: 1px #1b1b1a solid;
+	text-decoration: none;
+	color: white ;
+	background-color: #1b1b1a;
+	border-radius: 5px;
+	padding: 5px;
+	margin-left: 5px;
+}
+
 .Titre{
 	text-align: center;
-	font-family: 'stay_classy_sldtregular';
-	color: #FFD700;
-	font-size: 100px;
-	text-shadow: 2px 2px 2px black; 
-	margin-bottom: auto;
-	margin-top: 15px;
+	font-family: 'Avenir Next Regular';
+	color: #ae8717;
+	font-size: 40px;
+	margin-bottom: 50px;
+	margin-top: 50px;
 }
+/* Fin de partie */
+#btnAgain, #btnContinue{
+	font-size: 20px;
+	border: 1px #1b1b1a solid;
+	text-decoration: none;
+	color: white ;
+	background-color: #1b1b1a;
+	border-radius: 5px;
+	padding: 5px;
+}
+
 .inputMise, .inscriptionMoney, .inscriptionPassword,.inscriptionPseudo, .connectPassword, .connectPseudo {
 	font-size: 20px;
 	width: 200px;
 	height: 30px;
 	border-radius: 5px;
 	border: 1px black solid;
-}
-button{
-	font-size: 19px;
-	width: 100px;
-	height: 30px;
-	border-radius: 5px;
-	border: 1px black;
-	color: white;
-	font-weight: bold;
 }
 .valider{
 	background-color: black;
@@ -74,7 +119,7 @@ button{
 	padding: auto;
 }
 .transition{
-	background-color: #FFD700;
+	background-color: #ae8717;
 	height: 5px;
 	width: 200px;
 	margin-top: 50px;
@@ -88,18 +133,17 @@ button{
 }
 .page{
 	background-color: white;
-	width: 1250px;
+	width: 65%;
 	height: auto;
-	border:5px black solid;
 	margin: auto;
 	padding: auto;
-	border-radius: 15px;
 }
 .tableDistribCartes{
 	border-collapse: separate;
     border-spacing: 250px 0px; 
 	margin-left: 35px;
 	padding: auto;
+	text-align: center;
 }
 .mise{
 

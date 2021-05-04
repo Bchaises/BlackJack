@@ -112,6 +112,11 @@ if (isset($_GET['mise'])) {
 	$module = 'mise';
 }
 
+// retour à la page mise
+if (isset($_GET['recommencer'])) {
+	$module = 'distribCartes';
+}
+
 
 // Mise
 if (isset($_POST['btnMise'])) {
