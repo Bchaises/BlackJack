@@ -532,7 +532,7 @@ else if ($module == 'finPartie') {
 }
 else if ($module == 'profil'){
 	include('../Vue/info.php');
-	include('../Vue/Profil.php');
+	include('../Vue/profil.php');
 }
 else{
 	echo "ERROR404";
