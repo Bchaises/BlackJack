@@ -2,6 +2,6 @@
 <html>
 <head>
 	<title>BlackJack</title>
-	<link rel="stylesheet" type="text/css" href="../BlackJack/Vue/style.css">
+	<link rel="stylesheet" type="text/css" href="../Vue/style.css">
 </head>
 <body>
