@@ -481,7 +481,6 @@ if ($module == 'profil') {
 				  <td>égalité<td>
 			</tr>
 			";
-
 		}
 		else{
 			$parties = $parties."<td style='color:red;'>".$games[$i]->getProfit()."€</td>
