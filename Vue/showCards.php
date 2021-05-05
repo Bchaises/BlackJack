@@ -1,6 +1,7 @@
 <p>Le jeu peut maintenant commencer !</p>
 
-<?= '<p class="mise">Mise : '.htmlspecialchars($_SESSION['mise']).'€</p>';?>
+<p class="mise">Mise : <?=$_SESSION['mise']?>€</p>
+<p class="mise">Solde : <?=$_SESSION['money']?>€</p>
 
 <table class="tableDistribCartes">
 	<tr>

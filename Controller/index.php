@@ -136,10 +136,8 @@ if (isset($_POST['btnMise'])) {
 	// on vérifie si la mise est correcte
 	if (isset($_POST['mise']) && $_POST['mise'] >= 2 && $_POST['mise'] <= 100 && $_POST['mise'] <= $_SESSION['money']) {
 
-		// on enregistre la mise et on modifie l'argent du joueur
+		// on enregistre la mise
 		$_SESSION['mise'] = $_POST['mise'];
-		$_SESSION['money'] = ($_SESSION['money'] - $_SESSION['mise']);
-		$daoPlayer->updatePlayer($_SESSION['pseudo'],$_SESSION['money']);
 
 		// on lance le module distribCartes
 		$module = 'distribCartes';
@@ -158,6 +156,10 @@ if (isset($_POST['btnMise'])) {
 
 // distribution des cartes pour le croupier et le joueur
 if ($module == 'distribCartes') {
+
+	// on modifie l'argent dy joueur
+	$_SESSION['money'] = ($_SESSION['money'] - $_SESSION['mise']);
+	$daoPlayer->updatePlayer($_SESSION['pseudo'],$_SESSION['money']);
 
 	// on initialise les variables session du nombre de cartes pour le croupier et le joueur
 	// ainsi que les variables de valeurs des cartes

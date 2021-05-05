@@ -12,14 +12,17 @@
 
 		</table>
 	</div>
-	<div class="win_rate">
-		<p>Pourcentage de victoire</p>
-		<div class="circle">
-			<?=$winRate?>
-		</div>
-	</div>
 
-	<div class="solde">
-		<p>Solde : <?=$_SESSION['money'];?>€</p>
+	<div id="userInfo">
+		<div class="win_rate">
+			<p>Pourcentage de victoire</p>
+			<div class="circle">
+				<?=$winRate?>
+			</div>
+		</div>
+
+		<div class="solde">
+			<p>Solde : <?=$_SESSION['money'];?>€</p>
+		</div>
 	</div>
 </div>
