@@ -8,7 +8,7 @@ class DAO_Game
 	public function __construct()
 	{
 		try{
-			$this->bdd = new PDO('mysql:host=localhost;dbname=blackjack','root','');
+			$this->bdd = new PDO('mysql:host=systemeblackjack.mysql.db;dbname=systemeblackjack','systemeblackjack','SR7ienacfNGfM34');
 		}catch(Exception $e){
 			die($e->getMessage());
 		}
