@@ -476,7 +476,7 @@ if ($module == 'profil') {
 
 			$nbrWin++;
 		}
-		else if (($games[$i]->getProfit()) = 0) {
+		else if (($games[$i]->getProfit()) == 0) {
 			$parties = $parties."<td style='color:blue;'>".$games[$i]->getProfit()."€</td>
 				  <td>égalité<td>
 			</tr>
