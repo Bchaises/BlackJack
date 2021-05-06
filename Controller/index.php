@@ -455,7 +455,8 @@ if ($module == 'distribCartes' || $module == 'game' || $module == 'finPartie') {
 if ($module == 'profil') {
 
 
-	$limit = 25;
+	$_SESSION['limit-records'] = isset($_POST['limit-records']) ? $_POST['limit-records'] : 25;
+	$limit = $_SESSION['limit-records'];
 	$start = ($page - 1) * $limit;
 
 	
@@ -537,6 +538,12 @@ if ($module == 'profil') {
 			$winRate = "<span style='color:#eb3b5a;font-weight:bold;'>".round($nbrWin/$cptWinrate*100,1)."%</span>";
 		}
 	}
+
+	// nombre de pages de l'historique
+	$total = $daoGame->numberGamesById($player->getId());
+	$pages =ceil( $total / $limit );
+	$Previous = $page - 1;
+	$Next = $page + 1;
 }
 
 // page html
@@ -558,23 +565,19 @@ else if($module == 'inscription'){
 }
 else if($module == 'mise'){
 	include('../Vue/info.php');
-	include('../Vue/transition.php');
 	include('../Vue/mise.php');
 }
 else if ($module == 'distribCartes') {
 	include('../Vue/info.php');
-	include('../Vue/transition.php');
 	include('../Vue/showCards.php');
 }
 else if ($module == 'game') {
 	include('../Vue/info.php');
-	include('../Vue/transition.php');
 	include('../Vue/showCards.php');
 	include('../Vue/choix.php');
 }
 else if ($module == 'finPartie') {
 	include('../Vue/info.php');
-	include('../Vue/transition.php');
 	include('../Vue/showCards.php');
 	include('../Vue/lienFin.php');
 }

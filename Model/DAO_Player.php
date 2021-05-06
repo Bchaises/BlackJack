@@ -1,17 +1,12 @@
 <?php
 require_once('../Model/DTO_Player.php');
+require_once('../Model/DAO.php');
 
-class DAO_Player
+class DAO_Player extends DAO
 {
-	private $bdd;
-
 	public function __construct()
 	{
-		try{
-			$this->bdd = new PDO('mysql:host=localhost;dbname=blackjack','root','');
-		}catch(Exception $e){
-			die($e->getMessage());
-		}
+		parent::__construct();
 	}
 
 	// fonction pour obtenir les infos d'un player par son id

@@ -1,17 +1,13 @@
 <?php
 require_once('../Model/DTO_Game.php'); 
+require_once('../Model/DAO.php');
 
-class DAO_Game
+class DAO_Game extends DAO
 {
-	private $bdd;
 
 	public function __construct()
 	{
-		try{
-			$this->bdd = new PDO('mysql:host=localhost;dbname=blackjack','root','');
-		}catch(Exception $e){
-			die($e->getMessage());
-		}
+		parent::__construct();
 	}
 
 	// fonction pour obtenir les infos d'une partie par son id avec limite
