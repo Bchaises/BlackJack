@@ -8,18 +8,55 @@ class DAO_Game
 	public function __construct()
 	{
 		try{
-			$this->bdd = new PDO('mysql:host=systemeblackjack.mysql.db;dbname=systemeblackjack','systemeblackjack','SR7ienacfNGfM34');
+			$this->bdd = new PDO('mysql:host=localhost;dbname=blackjack','root','');
 		}catch(Exception $e){
 			die($e->getMessage());
 		}
 	}
 
-	// fonction pour obtenir les infos d'une partie par son id
+	// fonction pour obtenir les infos d'une partie par son id avec limite
+	public function getByIdLimit($id,$start,$limit)
+	{
+		$sql = 'SELECT * FROM game WHERE player = ? LIMIT ?,?';
+		$req = $this->bdd->prepare($sql);
+
+		$req->bindParam(1, $id, PDO::PARAM_STR);
+		$req->bindParam(2, $start, PDO::PARAM_INT);
+		$req->bindParam(3, $limit, PDO::PARAM_INT);
+
+		$req->execute();
+
+		$games = [];
+
+		while ($data = $req->fetch()) {
+
+			$id = $data['id'];
+			$player = $data['player'];
+			$date = $data['date'];
+			$bet = intval($data['bet']);
+			$profit = intval($data['profit']);
+
+			$game = new DTO_Game($id,$player,$date,$bet,$profit);
+
+			array_push($games, $game);
+
+		}
+
+		if ($games != null) {
+			return $games;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	// fonction pour obtenir les infos d'une partie par son id sans limite
 	public function getById($id)
 	{
 		$sql = 'SELECT * FROM game WHERE player = ?';
 		$req = $this->bdd->prepare($sql);
-		$req->execute([$id]);
+		$req->execute(array($id));
 
 		$games = [];
 
@@ -153,6 +190,17 @@ class DAO_Game
 		return true;
 	}
 	
+	//renvoie le nombre de parties d'un joueur
+	public function numberGamesByIdLimit($id,$start,$limit){
+		$sql = 'SELECT COUNT(id) FROM game WHERE player = ? LIMIT ?,?';
+		$req = $this->bdd->prepare($sql);
+		$req->execute(array($id,$start,$limit));
+
+		$data = intval($req->fetch()[0]);
+
+		return $data;
+	}
+
 	//renvoie le nombre de parties d'un joueur
 	public function numberGamesById($id){
 		$sql = 'SELECT COUNT(id) FROM game WHERE player = ?';

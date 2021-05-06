@@ -2,9 +2,11 @@
 	<div class="history">
 		<table>
 			<tr class="row_history">
-				<th class="title_history">Date</th>
+				<th class="title_history">ID</th>
 				<th class="title_history">Pari</th>
 				<th class="title_history">Profit</th>
+				<th class="title_history">Victoire/Défaite</th>
+				<th class="title_history">Date</th>
 			</tr>
 			<?= 
 				$parties

@@ -1,19 +1,23 @@
-<p>Le jeu peut maintenant commencer !</p>
+<div id="infoUser">
+	<p>Le jeu peut maintenant commencer !</p>
 
-<p class="mise">Mise : <?=$_SESSION['mise']?>€</p>
-<p class="mise">Solde : <?=$_SESSION['money']?>€</p>
+	<div id="infoMoney">
+		<p class="mise" style="padding-right: 10px;border-right:1px solid black">Mise :<span style="font-weight: bold;"> <?=$_SESSION['mise']?>€</span></p>
+		<p class="mise" style="padding-left: 10px;">Solde :<span style="font-weight: bold;"> <?=$_SESSION['money']?>€</span></p>
+	</div>
+</div>
 
-<table class="tableDistribCartes">
-	<tr>
-		<td>
-			<p>La main du croupier :</p>
-			<?= $affichageC;?>
-			<?= '<p>Valeur : '.$_SESSION['valueC'].'</p>';?>
-		</td>
-		<td>
-			<p>Votre main :</p>
-			<?= $affichageP;?>
-			<?= '<p>Valeur : '.$_SESSION['valueP'].'</p>';?>
-		</td>
-	</tr>
-</table>
+<div id="tableDistribCartes">
+
+	<div id="croupierHand">
+		<p>La main du croupier :</p>
+		<?= $affichageC;?>
+		<p>Valeur : <?=$_SESSION['valueC']?></p>
+	</div>
+
+	<div id="playerHand">
+		<p>Votre main :</p>
+		<?= $affichageP;?>
+		<p>Valeur : <?=$_SESSION['valueP']?></p>
+	</div>
+</div>

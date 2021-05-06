@@ -442,70 +442,110 @@ if ($module == 'distribCartes' || $module == 'game' || $module == 'finPartie') {
 	}
 }
 
+// permet de passer d'une page à l'autre dans l'historique
+	if (isset($_GET['page'])) {
+		$page = $_GET['page'];
+		$module='profil';
+	}
+	else{
+		$page = 1;
+	}
+
 //affichage des parties réalisées
 if ($module == 'profil') {
+
+
+	$limit = 25;
+	$start = ($page - 1) * $limit;
+
 	
 	$player = $daoPlayer->getByPseudo($_SESSION['pseudo']);
-	$games = $daoGame->getById($player->getId());
-	$cpt = $daoGame->numberGamesById($player->getId());
+	$games = $daoGame->getByIdLimit($player->getId(),$start,$limit);
 
 	$parties = '';
 	$nbrWin = 0;
 	$winRate = 0;
+	$cpt = $start + 1;
 
-	for ($i=0; $i < $cpt; $i++) { 
-		$date = date_create($games[$i]->getDate());
-
-		$tabJours = ["", "Lundi", "Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
-		$jour = $tabJours[date_format($date, 'N')];
-
-		$tabMois = ["","Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Decembre"];
-		$mois = $tabMois[date_format($date,'n')];
-
-		$dateFormat = $jour." ".date_format($date,'d')." ".$mois." ".date_format($date, 'à g\hi');
-
-		$parties = $parties. "
-		<tr class='row_history'>
-			<td>".$dateFormat."</td>
-			<td>".$games[$i]->getBet()."€</td>
-		";
-
-		if ( ($games[$i]->getProfit()) > 0) {
-			$parties = $parties."<td style='color:green;'>".$games[$i]->getProfit()."€</td>
-				  <td>gagné<td>
-			</tr>
-			";
-
-			$nbrWin++;
-		}
-		else if (($games[$i]->getProfit()) == 0) {
-			$parties = $parties."<td style='color:blue;'>".$games[$i]->getProfit()."€</td>
-				  <td>égalité<td>
-			</tr>
-			";
-		}
-		else{
-			$parties = $parties."<td style='color:red;'>".$games[$i]->getProfit()."€</td>
-				  <td>perdu<td>
-			</tr>
-			";
-
-		}
-	}
-
-
-	if($nbrWin/$cpt*100 >= 50){
-		$winRate = "<span style='color:green;'>".round($nbrWin/$cpt*100,1)."%</span>";
+	if ($games == null) {
+		$messageErreur = "Aucune données trouvées";
 	}
 	else{
-		$winRate = "<span style='color:red;'>".round($nbrWin/$cpt*100,1)."%</span>";
-	}
 
+		foreach ($games as $game) { 
+
+			$date = date_create($game->getDate());
+
+			$tabJours = ["", "Lundi", "Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
+			$jour = $tabJours[date_format($date, 'N')];
+
+			$tabMois = ["","Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Decembre"];
+			$mois = $tabMois[date_format($date,'n')];
+
+			$dateFormat = $jour." ".date_format($date,'d')." ".$mois." ".date_format($date, 'à g\hi');
+
+			$parties = $parties. "
+			<tr class='row_history'>
+				<td>".$cpt."</td>
+				<td>".$game->getBet()."€</td>
+			";
+
+			if ( ($game->getProfit()) > 0) {
+				$parties = $parties."
+				<td style='color:#20bf6b;font-weight:bold;'>".$game->getProfit()."€
+				</td>
+					<td>gagné</td>
+					<td>".$dateFormat."</td>
+				</tr>
+				";
+			}
+			else if (($game->getProfit()) == 0) {
+				$parties = $parties."<td style='color:#3867d6;font-weight:bold;'>".$game->getProfit()."€</td>
+					<td>égalité</td>
+					<td>".$dateFormat."</td>
+				</tr>
+				";
+			}
+			else{
+				$parties = $parties."<td style='color:#eb3b5a;font-weight:bold;'>".$game->getProfit()."€</td>
+					  <td>perdu</td>
+					<td>".$dateFormat."</td>
+				</tr>
+				";
+
+			}
+
+			$cpt++;
+		}
+
+
+		// Calcule le nombre de victoires au total
+		$games = $daoGame->getById($player->getId());
+		foreach ($games as $game) {
+			if ( ($game->getProfit()) > 0) {
+				$nbrWin++;
+			}
+		}
+
+		$cptWinrate = $daoGame->numberGamesById($player->getId());
+
+
+		if($nbrWin/$cptWinrate*100 >= 50){
+			$winRate = "<span style='color:#20bf6b;font-weight:bold;'>".round($nbrWin/$cptWinrate*100,1)."%</span>";
+		}
+		else{
+			$winRate = "<span style='color:#eb3b5a;font-weight:bold;'>".round($nbrWin/$cptWinrate*100,1)."%</span>";
+		}
+	}
 }
 
 // page html
 include('../Vue/top_page.php');
 include('../Vue/header.php');
+
+if (!isset($_SESSION['pseudo'])) {
+	include('../Vue/boutonConnect.php');
+}
 
 // différents modules
 if ($module == 'connection') {

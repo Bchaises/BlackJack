@@ -59,12 +59,12 @@ header{
 }
 
 /* info */
-#info{
+#info, #connect{
 	position: absolute;
 	top:0;
 	right: 20px;
 }
-#deco{
+#deco, #connect{
 	border: 1px #1b1b1a solid;
 	text-decoration: none;
 	color: white ;
@@ -72,6 +72,9 @@ header{
 	border-radius: 5px;
 	padding: 5px;
 	margin-left: 5px;
+}
+#connect{
+	top: 14px;
 }
 
 .Titre{
@@ -83,7 +86,7 @@ header{
 	margin-top: 50px;
 }
 /* Fin de partie */
-#btnAgain, #btnContinue, #btnMise, #formConnect #button button, #formInscription #button button{
+#btnAgain, #btnContinue, #btnMise, #formConnect #button button, #formInscription #button button,#formChoice #btnChoiceSubmit{
 	font-size: 20px;
 	border: 1px #1b1b1a solid;
 	text-decoration: none;
@@ -158,23 +161,55 @@ header{
 	margin: auto;
 	padding: auto;
 }
-.tableDistribCartes{
+#tableDistribCartes{
+	display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+
 	border-collapse: separate;
-    border-spacing: 250px 0px; 
-	margin-left: 35px;
-	padding: auto;
+    border-spacing: 250px 0px;
 	text-align: center;
+}
+#infoUser{
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#infoUser #infoMoney{
+	display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#liensFin{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
 }
 .mise{
 
 }
-.formChoice{
-	margin-top: 5%;
-	margin-left: 30%;
-	margin-right: 30%;
+#formChoice{
 	border:5px black dashed;
-	text-align: center;
+	padding: 10px;
 }
+#containerChoice{
+	display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+#choice_item_1, #choice_item_2, #choice_item_3{
+	display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: baseline;
+    padding: 5px;
+}
+
 .tableChoice{
 	margin-left: 2.5%;
 	margin-right: 2.5%;
