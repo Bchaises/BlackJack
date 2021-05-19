@@ -230,11 +230,13 @@ header{
 
 /* Profil */
 .history{
-	margin-top: 20px;
 	border: 1px solid #474747;
 	border-radius: 3px;
 	background-color: #F2F4F4;
+}
+.container_history{
 
+	margin-top: 20px;
 }
 .tableHistory td, .tableHistory th{
 	border-bottom: 1px solid #474747;
@@ -271,7 +273,7 @@ header{
 	display: flex;
     flex-direction: row;
     align-items: flex-start;
-    justify-content: flex-start;
+    justify-content: space-evenly;
 }
 .win_rate{
 }

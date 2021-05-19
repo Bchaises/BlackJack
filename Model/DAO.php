@@ -11,7 +11,7 @@ abstract class DAO
 	public function __construct()
 	{
 		try{
-			$this->bdd = new PDO('mysql:host=systemeblackjack.mysql.db;dbname=systemeblackjack','systemeblackjack','SR7ienacfNGfM34');
+			$this->bdd = new PDO('mysql:host=localhost;dbname=blackjack','root','');
 		}catch(Exception $e){
 			die($e->getMessage());
 		}

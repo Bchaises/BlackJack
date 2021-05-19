@@ -117,6 +117,10 @@ if (isset($_GET['recommencer'])) {
 	$module = 'distribCartes';
 }
 
+if (isset($_GET['regles'])) {
+	$module = 'regles';
+}
+
 // l'utilisateur tente d'accéder à profil sans s'être connecté
 if (isset($_GET['profil']) && !isset($_SESSION['pseudo'])) {
 	$module = "connection";
@@ -483,7 +487,7 @@ if ($module == 'profil') {
 			$tabMois = ["","Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Decembre"];
 			$mois = $tabMois[date_format($date,'n')];
 
-			$dateFormat = $jour." ".date_format($date,'d')." ".$mois." ".date_format($date, 'à g\hi');
+			$dateFormat = $jour." ".date_format($date,'d')." ".$mois." ".date_format($date, 'à G\hi');
 
 			$parties = $parties. "
 			<tr class='row_history'>
@@ -584,6 +588,10 @@ else if ($module == 'finPartie') {
 else if ($module == 'profil'){
 	include('../Vue/info.php');
 	include('../Vue/profil.php');
+}
+else if ($module == 'regles'){
+	include('../Vue/info.php');
+	include('../Vue/regles.php');
 }
 else{
 	echo "ERROR404";
