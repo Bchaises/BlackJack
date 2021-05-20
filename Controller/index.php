@@ -557,6 +557,9 @@ include('../Vue/header.php');
 if (!isset($_SESSION['pseudo'])) {
 	include('../Vue/boutonConnect.php');
 }
+else{
+	include('../Vue/info.php');
+}
 
 // différents modules
 if ($module == 'connection') {
@@ -568,29 +571,23 @@ else if($module == 'inscription'){
 	include('../Vue/inscription_form.php');
 }
 else if($module == 'mise'){
-	include('../Vue/info.php');
 	include('../Vue/mise.php');
 }
 else if ($module == 'distribCartes') {
-	include('../Vue/info.php');
 	include('../Vue/showCards.php');
 }
 else if ($module == 'game') {
-	include('../Vue/info.php');
 	include('../Vue/showCards.php');
 	include('../Vue/choix.php');
 }
 else if ($module == 'finPartie') {
-	include('../Vue/info.php');
 	include('../Vue/showCards.php');
 	include('../Vue/lienFin.php');
 }
 else if ($module == 'profil'){
-	include('../Vue/info.php');
 	include('../Vue/profil.php');
 }
 else if ($module == 'regles'){
-	include('../Vue/info.php');
 	include('../Vue/regles.php');
 }
 else{
@@ -620,4 +617,5 @@ if ($message != '') {
 	">'.$message.".</span>";
 }
 
+include ('../Vue/footer.php');
 include('../Vue/bottom_page.php');

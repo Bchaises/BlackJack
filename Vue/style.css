@@ -156,7 +156,7 @@ header{
 }
 .page{
 	background-color: white;
-	width: 65%;
+	width: 80%;
 	height: auto;
 	margin: auto;
 	padding: auto;
@@ -362,4 +362,54 @@ header{
 .solde p{
 	font-weight: bold;
 	font-size: 20px;
+}
+
+/* REGLES */
+#container_regles h4{
+	color: #ae8717;
+}
+#container_regles{
+}
+#container_regles #regles_item1, #container_regles #regles_item2,#container_regles #regles_item3{
+	background-color: #f4f4f4;
+    position: relative;
+    margin-top: 80px;
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#container_regles #regles_item1 img,#container_regles #regles_item3 img{
+display: block;
+}
+#container_regles #regles_item1 p,#container_regles #regles_item3 p{
+	display: block;
+    text-align: left;
+    font-family: "Lucien-book";
+    font-size: .8em;
+}
+ #container_regles #regles_item2 p{
+ 	display: block;
+    text-align: left;
+    font-family: "Lucien-book";
+    font-size: .8em;
+ }
+#container_regles #regles_item1 h4, #container_regles #regles_item2 h4,#container_regles #regles_item3 h4{
+	font-family: "Lucien-bold";
+    font-size: 1em;
+    color: #a57b1b;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 50px;
+}
+#container_regles #regles_details{
+	display: block;
+    float: left;
+    margin-right: 1.25%;
+    width: 39%;
+    padding: 80px 70px;
+}
+
+/* FOOTER */
+#footer{
+	height: 80px;
 }
