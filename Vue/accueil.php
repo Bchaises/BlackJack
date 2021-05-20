@@ -21,15 +21,7 @@
 
 	<div id="container_classement">
 		<div>
-			<h1>Classements</h1>
-		</div>
-
-		<div>
-			<h1>Les soldes les plus élevé</h1>
-		</div>
-
-		<div>
-			<h1>meilleur pourcentage de victoire</h1>
+			<h1>Classements des meilleurs joueurs</h1>
 		</div>
 	</div>
 	

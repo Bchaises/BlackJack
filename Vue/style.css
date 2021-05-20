@@ -384,17 +384,17 @@ display: block;
 #container_regles #regles_item1 p,#container_regles #regles_item3 p{
 	display: block;
     text-align: left;
-    font-family: "Lucien-book";
+    font-family: 'Avenir Next Regular';
     font-size: .8em;
 }
  #container_regles #regles_item2 p{
  	display: block;
     text-align: left;
-    font-family: "Lucien-book";
+    font-family: 'Avenir Next Regular';
     font-size: .8em;
  }
 #container_regles #regles_item1 h4, #container_regles #regles_item2 h4,#container_regles #regles_item3 h4{
-	font-family: "Lucien-bold";
+	font-family: 'Avenir Next Regular';
     font-size: 1em;
     color: #a57b1b;
     text-align: center;
@@ -415,16 +415,20 @@ display: block;
 }
 
 /* ACCUEIL */
+#container_accueil #banniere{
+	height: 390px;
+}
 #container_accueil #banniere img{
 	width: 100%;
 	height: 350px;
 	margin-bottom: 30px;
 	margin-top: 10px;
+	position: relative;
 }
 #container_accueil #accueil_details{
 	display: flex;
 	flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 #accueil_details #accueil_item1, #accueil_details #accueil_item2{
 	width: 650px;
@@ -432,7 +436,7 @@ display: block;
 	padding: 50px;
 }
 #accueil_details h4{
-	font-family: "Lucien-bold";
+	font-family: 'Avenir Next Regular';
     font-size: 1em;
     color: #a57b1b;
     text-align: center;
@@ -441,15 +445,56 @@ display: block;
 }
 #accueil_details p{
 	display: block;
-    font-family: "Lucien-book";
+    font-family: 'Avenir Next Regular';
     font-size: 0.8em;
     text-align: justify;
 }
 #banniere h1{
-	position: absolute;
-	top: 400px;
-	margin:0;
-	left: 37.5%;
-	transform: translateX(37.5%);
-	color: #f4f4f4;
+	position: relative;
+    top: -225px;
+    display: flex;
+    margin: 0;
+    color: #f4f4f4;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+
+.drawCard:hover:after,
+.past:focus:after,
+.double:focus:after,
+.doubleGame:focus:after {
+  content: attr(aria-label);  /* on affiche aria-label */
+  position: absolute;
+  top: -2.4em;
+  left: 50%;
+	transform: translateX(-50%); /* on centre horizontalement  */
+  z-index: 1; /* pour s'afficher au dessus des éléments en position relative */
+  white-space: nowrap;  /* on interdit le retour à la ligne*/
+  padding: 5px 14px;
+  background: #413219;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 1.2rem;
+}
+
+/* on génère un second élément en :before pour la flèche */
+
+[aria-label]:hover:before,
+[aria-label]:focus:before {
+  content: "▼";
+  position: absolute;
+  top: -1em;
+	left: 50%;
+	transform: translateX(-50%); /* on centre horizontalement  */
+  font-size: 20px;
+  color: #413219;
+}
+
+/* pas de contour durant le :focus */
+[aria-label]:focus {
+  outline: none;
 }

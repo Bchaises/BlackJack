@@ -362,7 +362,7 @@ if ($module == 'finPartie') {
 	}else if ($_SESSION['valueC']>21) {
 
 		// on informe le joueur de la victoire
-		$message = 'Vous avez gagné! Vous récupérez donc votre mise plus 1x votre mise.';
+		$message = 'Vous avez gagné! Vous récupérez donc votre mise plus 1 fois votre mise.';
 
 		// on modifie le solde 
 		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + ($_SESSION['mise'] * 2) ));
@@ -382,7 +382,7 @@ if ($module == 'finPartie') {
 	else if ($_SESSION['valueP'] > $_SESSION['valueC']) {
 
 		// on informe le joueur de la victoire
-		$message = 'Vous avez gagné! Vous récupérez donc votre mise plus 1x votre mise.';
+		$message = 'Vous avez gagné! Vous récupérez donc votre mise plus 1 fois votre mise.';
 
 		// on modifie le solde
 		$daoPlayer->updatePlayer($_SESSION['pseudo'], ($_SESSION['money'] + ($_SESSION['mise'] * 2) ));
@@ -587,6 +587,8 @@ else if ($module == 'game') {
 else if ($module == 'finPartie') {
 	include('../Vue/showCards.php');
 	include('../Vue/lienFin.php');
+
+	$module = 'mise';
 }
 else if ($module == 'profil'){
 	include('../Vue/profil.php');
@@ -621,7 +623,7 @@ if ($message != '') {
 	flex-direction:column;
 	align-items: center;
 	
-	">'.$message.".</span>";
+	">'.$message."</span>";
 }
 
 
