@@ -121,6 +121,10 @@ if (isset($_GET['regles'])) {
 	$module = 'regles';
 }
 
+if (isset($_GET['accueil'])) {
+	$module = 'accueil';
+}
+
 // l'utilisateur tente d'accéder à profil sans s'être connecté
 if (isset($_GET['profil']) && !isset($_SESSION['pseudo'])) {
 	$module = "connection";
@@ -590,6 +594,9 @@ else if ($module == 'profil'){
 else if ($module == 'regles'){
 	include('../Vue/regles.php');
 }
+else if($module == 'accueil'){
+	include('../Vue/accueil.php');
+}
 else{
 	echo "ERROR404";
 }
@@ -616,6 +623,10 @@ if ($message != '') {
 	
 	">'.$message.".</span>";
 }
+
+
+$data = $daoPlayer->bestPlayers();
+var_dump($data);
 
 include ('../Vue/footer.php');
 include('../Vue/bottom_page.php');

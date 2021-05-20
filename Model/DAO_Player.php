@@ -133,4 +133,15 @@ class DAO_Player extends DAO
 		$req = $this->bdd->prepare($sql);
 		$req->execute(array($money,$pseudo));
 	}
+
+	// classement joueur
+	public function bestPlayers(){
+		$sql = 'SELECT pseudo,money from player order by money DESC';
+		$req = $this->bdd->prepare($sql);
+		$req->execute();
+
+		$data = $req->fetchall();
+
+		return $data;
+	}
 }
