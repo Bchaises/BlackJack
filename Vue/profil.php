@@ -29,7 +29,17 @@
 				<form action="#" method="post">
 					<select name="limit-records" id="limit-records">
 						<option disabled="disabled" selected="selected">
-							---Limite---
+							<?php
+
+							if (isset($_SESSION['limit-records'])) {
+								echo $_SESSION['limit-records'];
+							}
+							else{
+								echo "--Limite--";
+							}
+
+
+							?>
 						</option>
 						<?php foreach([10,25,50,100] as $limit){
 
