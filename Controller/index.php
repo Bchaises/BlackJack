@@ -10,7 +10,7 @@ require_once('../Model/DAO_Game.php');
 session_start();
 
 // la variable module gere les pages affiché
-$module = 'connection';
+$module = 'accueil';
 
 // les messages permettent d'informer l'utilisateur, ils sont affiché en fin de page
 $messageErreur = '';
@@ -88,7 +88,7 @@ if(isset($_SESSION['pseudo'])){
 // deconnexion du joueur
 if (isset($_GET['deco'])) {
 	unset($_SESSION['id'], $_SESSION['pseudo'], $_SESSION['money']);
-	$module = 'connection';
+	$module = 'accueil';
 }
 
 // bouton continuer
@@ -147,7 +147,7 @@ if (isset($_GET['mise']) && !isset($_SESSION['pseudo'])) {
 if (isset($_POST['btnMise'])) {
 
 	// on vérifie si la mise est correcte
-	if (isset($_POST['mise']) && $_POST['mise'] >= 2 && $_POST['mise'] <= 100 && $_POST['mise'] <= $_SESSION['money']) {
+	if (isset($_POST['mise']) && $_POST['mise'] >= 2 && $_POST['mise'] <= 1000 && $_POST['mise'] <= $_SESSION['money']) {
 
 		// on enregistre la mise
 		$_SESSION['mise'] = $_POST['mise'];
@@ -158,8 +158,8 @@ if (isset($_POST['btnMise'])) {
 	// message d'erreurs différents
 	}else if ($_POST['mise'] < 0) {
 		$messageErreur = "Erreur vous avez saisie une valeur négative.";
-	}else if ($_POST['mise'] > 100) {
-		$messageErreur = "Votre mise doit être comprise entre 2€ et 100€.";
+	}else if ($_POST['mise'] > 1000) {
+		$messageErreur = "Votre mise doit être comprise entre 2€ et 1000€.";
 	}else if ($_POST['mise'] > $_SESSION['money']) {
 		$messageErreur = "Erreur la mise est supérieur à votre solde.";
 	}else{
@@ -457,8 +457,20 @@ if ($module == 'distribCartes' || $module == 'game' || $module == 'finPartie') {
 
 // permet de passer d'une page à l'autre dans l'historique
 	if (isset($_GET['page'])) {
-		$page = $_GET['page'];
-		$module='profil';
+		if ($_GET['page'] > 0) {
+			if ($_GET['page'] <= $_SESSION['pages']) {
+				$page = $_GET['page'];
+				$module='profil';
+			}
+			else{
+				$page = $_SESSION['pages'];
+				$module = 'profil';
+			}
+		}
+		else{
+			$page = 1;
+			$module = 'profil';
+		}
 	}
 	else{
 		$page = 1;
@@ -467,8 +479,17 @@ if ($module == 'distribCartes' || $module == 'game' || $module == 'finPartie') {
 //affichage des parties réalisées
 if ($module == 'profil') {
 
-	$_SESSION['limit-records'] = isset($_POST['limit-records']) ? $_POST['limit-records'] : 25;
-	$limit = $_SESSION['limit-records'];
+
+	if (isset($_POST['limit-records'])) {
+		$limit = $_POST['limit-records'];
+		$_SESSION['limit-records'] = $_POST['limit-records'];
+	}
+	else if (isset($_SESSION['limit-records'])) {
+		$limit = $_SESSION['limit-records'];
+	}
+	else{
+		$limit = 25;
+	}
 	$start = ($page - 1) * $limit;
 
 	
@@ -555,6 +576,7 @@ if ($module == 'profil') {
 	// nombre de pages de l'historique
 	$total = $daoGame->numberGamesById($player->getId());
 	$pages =ceil( $total / $limit );
+	$_SESSION['pages'] = $pages;
 	$Previous = $page - 1;
 	$Next = $page + 1;
 
