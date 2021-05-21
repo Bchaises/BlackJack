@@ -25,7 +25,7 @@ class DAO_Player extends DAO
 			$money = $data['money'];
 
 			$player = new DTO_Player($id, $pseudo, $password, $money);
-			return player;
+			return $player;
 		}
 		else 
 		{

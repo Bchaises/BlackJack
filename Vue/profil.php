@@ -29,7 +29,7 @@
 				<form action="#" method="post">
 					<select name="limit-records" id="limit-records">
 						<option disabled="disabled" selected="selected">
-							---Limit Records---
+							---Limite---
 						</option>
 						<?php foreach([10,25,50,100] as $limit){
 
@@ -67,7 +67,8 @@
 		</div>
 
 		<div class="solde">
-			<p>Solde : <?=$_SESSION['money'];?>€</p>
+			<p style="padding-right: 10px;border-right:1px solid black">Solde : <?=$_SESSION['money'];?>€</p>
+			<p style="padding-left: 10px;">Rang : #<?=$rang;?></p>
 		</div>
 	</div>
 </div>

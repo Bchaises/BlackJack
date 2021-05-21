@@ -20,8 +20,24 @@
 	</div>
 
 	<div id="container_classement">
-		<div>
-			<h1>Classements des meilleurs joueurs</h1>
+		<div id="title">
+			<h4>Classements des 10 meilleurs joueurs</h4>
+		</div>
+
+		<div id="table_classement">
+			<table id="classement">
+				<tr>
+					<th>Rang</th>
+					<th>Pseudo</th>
+					<th>Solde</th>
+					<th>Pourcentage de Vitoire</th>
+				</tr>
+				<?= 
+
+						$classement 
+
+				?>
+			</table>
 		</div>
 	</div>
 	

@@ -207,4 +207,34 @@ class DAO_Game extends DAO
 
 		return $data;
 	}
+
+	// pourcentage de victoire
+	public function percentageVictory($id){
+
+		$games = $this->getById($id);
+		$nbrWin = 0;
+		$WinRate = 0;
+
+
+		if ($games != null) {
+			foreach ($games as $game) {
+			if ( ($game->getProfit()) > 0) {
+				$nbrWin++;
+			}
+			}
+		}
+		else{
+			return $WinRate;
+		}
+
+		$cptWinrate = $this->numberGamesById($id);
+
+		if($nbrWin == 0){
+			return $WinRate;
+		}
+		else{
+			$WinRate = round($nbrWin/$cptWinrate*100,1);
+			return $WinRate;
+		}
+	}
 }

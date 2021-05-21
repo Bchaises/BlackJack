@@ -113,8 +113,13 @@ if (isset($_GET['mise'])) {
 }
 
 // retour à la page mise
-if (isset($_GET['recommencer'])) {
-	$module = 'distribCartes';
+if (isset($_GET['recommencer'])){
+	if ($_SESSION['money'] > 0) {
+		$module = 'distribCartes';
+	}
+	else{
+		$messageErreur = 'Vous n\'avez plus de solde.';
+	}
 }
 
 if (isset($_GET['regles'])) {
@@ -462,7 +467,6 @@ if ($module == 'distribCartes' || $module == 'game' || $module == 'finPartie') {
 //affichage des parties réalisées
 if ($module == 'profil') {
 
-
 	$_SESSION['limit-records'] = isset($_POST['limit-records']) ? $_POST['limit-records'] : 25;
 	$limit = $_SESSION['limit-records'];
 	$start = ($page - 1) * $limit;
@@ -478,6 +482,7 @@ if ($module == 'profil') {
 
 	if ($games == null) {
 		$messageErreur = "Aucune données trouvées";
+		$winRate = "<span style='color:#eb3b5a;font-weight:bold;'>0%</span>";
 	}
 	else{
 
@@ -552,6 +557,47 @@ if ($module == 'profil') {
 	$pages =ceil( $total / $limit );
 	$Previous = $page - 1;
 	$Next = $page + 1;
+
+	// rang du joueur
+	$players = $daoPlayer->bestPlayers();
+	$cpt = 1;
+	$rang = 0;
+
+	foreach ($players as $player) {
+
+		$id = ($daoPlayer->getByPseudo($player['pseudo']))->getId();
+		$cpt++;
+
+		if($_SESSION['pseudo'] != $player['pseudo']){
+			$rang = $cpt;
+		}
+	}
+}
+
+if ($module == 'accueil') {
+	
+	$players = $daoPlayer->bestPlayers();
+	$cpt = 1;
+	$classement = '';
+
+	foreach ($players as $player) {
+
+		$id = ($daoPlayer->getByPseudo($player['pseudo']))->getId();
+		
+		$classement = $classement.'<tr>';
+
+		$classement = $classement.'<td>#'.$cpt.'</td>';
+
+		$classement = $classement.'<td>'.$player['pseudo'].'</td>';
+
+		$classement = $classement.'<td>'.$player['money'].'€</td>';
+
+		$classement = $classement.'<td>'.$daoGame->percentageVictory($id).'%</td>';
+
+		$classement = $classement.'<tr>';
+
+		$cpt++;
+	}
 }
 
 // page html
@@ -612,7 +658,7 @@ if ($messageErreur != '') {
 	flex-direction:column;
 	align-items: center;
 
-	">'.$messageErreur.".</span>";
+	">'.$messageErreur."</span>";
 }
 
 // message d'information
@@ -625,10 +671,6 @@ if ($message != '') {
 	
 	">'.$message."</span>";
 }
-
-
-$data = $daoPlayer->bestPlayers();
-var_dump($data);
 
 include ('../Vue/footer.php');
 include('../Vue/bottom_page.php');

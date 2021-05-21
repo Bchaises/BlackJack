@@ -286,6 +286,7 @@ header{
 #pagination{
 	display: flex;
 	flex-direction: row;
+	padding-bottom: 10px;
 }
 #pagination #number{
 	border-radius: 5px;
@@ -460,41 +461,28 @@ display: block;
     align-items: center;
 }
 
-
-
-
-.drawCard:hover:after,
-.past:focus:after,
-.double:focus:after,
-.doubleGame:focus:after {
-  content: attr(aria-label);  /* on affiche aria-label */
-  position: absolute;
-  top: -2.4em;
-  left: 50%;
-	transform: translateX(-50%); /* on centre horizontalement  */
-  z-index: 1; /* pour s'afficher au dessus des éléments en position relative */
-  white-space: nowrap;  /* on interdit le retour à la ligne*/
-  padding: 5px 14px;
-  background: #413219;
-  color: #fff;
-  border-radius: 4px;
-  font-size: 1.2rem;
+/* CLASSEMENT ACCUEIL*/
+#container_classement #title{
+	font-family: 'Avenir Next Regular';
+    font-size: 1em;
+    color: #a57b1b;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 50px;
 }
-
-/* on génère un second élément en :before pour la flèche */
-
-[aria-label]:hover:before,
-[aria-label]:focus:before {
-  content: "▼";
-  position: absolute;
-  top: -1em;
-	left: 50%;
-	transform: translateX(-50%); /* on centre horizontalement  */
-  font-size: 20px;
-  color: #413219;
+#container_classement #table_classement{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
 }
-
-/* pas de contour durant le :focus */
-[aria-label]:focus {
-  outline: none;
+#container_classement{
+	background-color: #f4f4f4;
+	padding: 50px;
+	margin-top: 30px
+}
+#container_classement #table_classement td,#container_classement #table_classement th{
+	padding: 8px;
+}
+#container_classement #table_classement th{
+	text-align: left;
 }
