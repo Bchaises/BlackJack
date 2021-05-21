@@ -457,8 +457,20 @@ if ($module == 'distribCartes' || $module == 'game' || $module == 'finPartie') {
 
 // permet de passer d'une page à l'autre dans l'historique
 	if (isset($_GET['page'])) {
-		$page = $_GET['page'];
-		$module='profil';
+		if ($_GET['page'] > 0) {
+			if ($_GET['page'] <= $_SESSION['pages']) {
+				$page = $_GET['page'];
+				$module='profil';
+			}
+			else{
+				$page = $_SESSION['pages'];
+				$module = 'profil';
+			}
+		}
+		else{
+			$page = 1;
+			$module = 'profil';
+		}
 	}
 	else{
 		$page = 1;
@@ -564,6 +576,7 @@ if ($module == 'profil') {
 	// nombre de pages de l'historique
 	$total = $daoGame->numberGamesById($player->getId());
 	$pages =ceil( $total / $limit );
+	$_SESSION['pages'] = $pages;
 	$Previous = $page - 1;
 	$Next = $page + 1;
 
