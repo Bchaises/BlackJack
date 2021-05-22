@@ -287,13 +287,24 @@ header{
 	display: flex;
 	flex-direction: row;
 	padding-bottom: 10px;
+	width: 618px;
+}
+#pagination #formLimit select{
+	font-size: 20px;
+	width: auto;
+	height: auto;
+	padding: 4px;
+}
+#pagination #formLimit div{
+	padding: 3px;
 }
 #pagination #number{
 	border-radius: 5px;
-	background-color: #F2F4F4;
 }
-#pagination #number li{
+#pagination #number li, select{
 	border:1px solid grey;
+	background-color: #F2F4F4;
+	margin-top: 5px;
 }
 #pagination #number #Previous{
 	border-radius:3px 0 0 3px;
@@ -316,6 +327,7 @@ header{
 	padding: 0;
 
 	display: flex;
+	flex-wrap: wrap;
 	flex-direction:row;
 	align-items: center;
 	justify-content: flex-start;
