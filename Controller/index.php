@@ -118,11 +118,11 @@ if (isset($_GET['mise'])) {
 
 // retour à la page mise
 if (isset($_GET['recommencer'])){
-	if ($_SESSION['money'] > 0) {
+	if ($_SESSION['money'] > 0 && $_SESSION['mise'] <= $_SESSION['money']) {
 		$module = 'distribCartes';
 	}
 	else{
-		$messageErreur = 'Vous n\'avez plus de solde.';
+		$messageErreur = 'Vous n\'avez pas assez de solde.';
 	}
 }
 
