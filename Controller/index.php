@@ -52,6 +52,10 @@ if (isset($_POST['btnConnection'])) {
 	}
 }
 
+if (isset($_GET['Connection'])) {
+	$module = 'connection';
+}
+
 // inscription du joueur
 if (isset($_GET['inscription'])) {
 	$module = 'inscription';
@@ -87,7 +91,7 @@ if(isset($_SESSION['pseudo'])){
 
 // deconnexion du joueur
 if (isset($_GET['deco'])) {
-	unset($_SESSION['id'], $_SESSION['pseudo'], $_SESSION['money']);
+	unset($_SESSION['id'], $_SESSION['pseudo'], $_SESSION['money'],$_SESSION['limit-records'],$_SESSION['variation']);
 	$module = 'accueil';
 }
 
@@ -490,16 +494,34 @@ if ($module == 'profil') {
 	else{
 		$limit = 25;
 	}
+
+	if (isset($_POST['variation'])) {
+		$variation = $_POST['variation'];
+		$_SESSION['variation'] = $_POST['variation'];
+	}
+	else if (isset($_SESSION['variation'])) {
+		$variation = $_SESSION['variation'];
+	}
+	else{
+		$variation = 'croissant';
+	}
+
 	$start = ($page - 1) * $limit;
 
 	
 	$player = $daoPlayer->getByPseudo($_SESSION['pseudo']);
-	$games = $daoGame->getByIdLimit($player->getId(),$start,$limit);
+	$games = $daoGame->getByIdLimit($player->getId(),$start,$limit,$variation);
 
 	$parties = '';
 	$nbrWin = 0;
 	$winRate = 0;
-	$cpt = $start + 1;
+
+	if ($variation == 'croissant') {
+		$cpt = $start + 1;
+	}
+	else{
+		$cpt = $daoGame->numberGamesById($player->getId()) - $start;
+	}
 
 	if ($games == null) {
 		$messageErreur = "Aucune données trouvées";
@@ -550,7 +572,12 @@ if ($module == 'profil') {
 
 			}
 
-			$cpt++;
+			if ($variation == 'croissant') {
+				$cpt++;
+			}
+			else{
+				$cpt--;
+			}
 		}
 
 
