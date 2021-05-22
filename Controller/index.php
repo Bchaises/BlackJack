@@ -91,7 +91,7 @@ if(isset($_SESSION['pseudo'])){
 
 // deconnexion du joueur
 if (isset($_GET['deco'])) {
-	unset($_SESSION['id'], $_SESSION['pseudo'], $_SESSION['money'],$_SESSION['limit-records'],$_SESSION['variation']);
+	unset($_SESSION['id'], $_SESSION['pseudo'], $_SESSION['money'],$_SESSION['limit-records'],$_SESSION['variation'],$_SESSION['mise']);
 	$module = 'accueil';
 }
 
@@ -99,6 +99,7 @@ if (isset($_GET['deco'])) {
 if (isset($_GET['continuer'])) {
 	header('location:index.php');
 	$module = "continuer";
+	$_SESSION['mise'] = 0;
 }
 
 // bouton arrêt
@@ -114,16 +115,6 @@ if (isset($_GET['profil'])) {
 // retour à la page mise
 if (isset($_GET['mise'])) {
 	$module = 'mise';
-}
-
-// retour à la page mise
-if (isset($_GET['recommencer'])){
-	if ($_SESSION['money'] > 0 && $_SESSION['mise'] <= $_SESSION['money']) {
-		$module = 'distribCartes';
-	}
-	else{
-		$messageErreur = 'Vous n\'avez pas assez de solde.';
-	}
 }
 
 if (isset($_GET['regles'])) {
@@ -146,13 +137,13 @@ if (isset($_GET['mise']) && !isset($_SESSION['pseudo'])) {
 	$messageErreur = "Veuillez vous connecter avant d'accéder à l'onglet \"Jouer\"";
 }
 
-
 // Mise
-if (isset($_POST['btnMise'])) {
+if (isset($_POST['btnMise']) && isset($_SESSION['money'])) {
 
 	// on vérifie si la mise est correcte
 	if (isset($_POST['mise']) && $_POST['mise'] >= 2 && $_POST['mise'] <= 1000 && $_POST['mise'] <= $_SESSION['money']) {
 
+		$_SESSION['mise'] = 0;
 		// on enregistre la mise
 		$_SESSION['mise'] = $_POST['mise'];
 
@@ -162,12 +153,45 @@ if (isset($_POST['btnMise'])) {
 	// message d'erreurs différents
 	}else if ($_POST['mise'] < 0) {
 		$messageErreur = "Erreur vous avez saisie une valeur négative.";
+		$_SESSION['mise'] = 0;
 	}else if ($_POST['mise'] > 1000) {
 		$messageErreur = "Votre mise doit être comprise entre 2€ et 1000€.";
+		$_SESSION['mise'] = 0;
 	}else if ($_POST['mise'] > $_SESSION['money']) {
 		$messageErreur = "Erreur la mise est supérieur à votre solde.";
+		$_SESSION['mise'] = 0;
 	}else{
 		$messageErreur = "Erreur lors de la saisie de votre mise.";
+		$_SESSION['mise'] = 0;
+	}
+}
+
+// recommence la partie avec la même mise
+if (isset($_GET['recommencer']) && isset($_SESSION['money'])){
+	if ($_SESSION['money'] > 0 && $_SESSION['mise'] <= $_SESSION['money']) {
+		$module = 'distribCartes';
+	}
+	else{
+		$messageErreur = 'Vous n\'avez pas assez de solde.';
+		$_SESSION['mise'] = 0;
+	}
+}
+
+
+// supprime tout du joueur si le solde arrive à 0
+if (isset($_SESSION['money']) && isset($_SESSION['pseudo']) && isset($_SESSION['mise'])) {
+	if ($_SESSION['money'] <= 0 && $_SESSION['mise'] == 0) {
+		$player = $daoPlayer->getByPseudo($_SESSION['pseudo']);
+		$daoGame->supprGames($player->getId());
+		$daoPlayer->supprPlayer($player->getId());
+		
+		echo "<script type='text/javascript'>
+					alert('Pas de bol ! Ton solde est arrivé à 0 ton compte a été supprimé!');
+	  		  </script>";
+
+		unset($_SESSION['id'], $_SESSION['pseudo'], $_SESSION['money'],$_SESSION['limit-records'],$_SESSION['variation'],$_SESSION['mise']);
+
+		$module = 'accueil';
 	}
 }
 

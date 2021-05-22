@@ -247,4 +247,12 @@ class DAO_Game extends DAO
 			return $WinRate;
 		}
 	}
+
+	public function supprGames($id){
+		$sql = 'DELETE FROM game WHERE player = ?';
+		$req = $this->bdd->prepare($sql);
+		$req->execute(array($id));
+
+		return true;
+	}
 }

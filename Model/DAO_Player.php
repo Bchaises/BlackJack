@@ -144,4 +144,12 @@ class DAO_Player extends DAO
 
 		return $data;
 	}
+
+	public function supprPlayer($id){
+		$sql = 'DELETE FROM player WHERE id = ?';
+		$req = $this->bdd->prepare($sql);
+		$req->execute(array($id));
+
+		return true;
+	}
 }

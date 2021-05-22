@@ -14,7 +14,7 @@
 
 		<div id="accueil_item2">
 			<h4>Que faire sur le site ?</h4>
-			<p>Vous pourrez jouer au Blackjack en vous inscrivant grâce au boutton "Connexion".Le but est de battre le croupier en suivant les règles de base, pour plus d'informations dirigez vous sur l'onglet "Règles". Attention, lorsque vous vous créez un compte votre solde sera par défaut à 1000€ mais s'il déscend à 0€ votre compte sera intégralement supprimer. Pour suivre votre progression vous aurez à votre disposition l'onglet "Profil".<br><br> Parfait ! Maintenant vous êtes paré pour être millionaire !</p>
+			<p>Vous pourrez jouer au Blackjack en vous inscrivant grâce au boutton "Connexion".Le but est de battre le croupier en suivant les règles de base, pour plus d'informations dirigez vous sur l'onglet "Règles". Attention, lorsque vous vous créez un compte votre solde sera par défaut à 1000€ en sachant que l'argent sur ce site est factice.S'il déscend à 0€ votre compte sera intégralement supprimer. Pour suivre votre progression vous aurez à votre disposition l'onglet "Profil".<br><br> Parfait ! Maintenant vous êtes paré pour être millionaire !</p>
 		</div>
 
 	</div>
