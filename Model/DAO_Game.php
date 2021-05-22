@@ -11,14 +11,24 @@ class DAO_Game extends DAO
 	}
 
 	// fonction pour obtenir les infos d'une partie par son id avec limite
-	public function getByIdLimit($id,$start,$limit)
+	public function getByIdLimit($id,$start,$limit,$variation)
 	{
-		$sql = 'SELECT * FROM game WHERE player = ? LIMIT ?,?';
-		$req = $this->bdd->prepare($sql);
+		if ($variation == 'croissant') {
+			$sql = 'SELECT * FROM game WHERE player = ? ORDER BY id ASC LIMIT ?,?';
+			$req = $this->bdd->prepare($sql);
 
-		$req->bindParam(1, $id, PDO::PARAM_STR);
-		$req->bindParam(2, $start, PDO::PARAM_INT);
-		$req->bindParam(3, $limit, PDO::PARAM_INT);
+			$req->bindParam(1, $id, PDO::PARAM_STR);
+			$req->bindParam(2, $start, PDO::PARAM_INT);
+			$req->bindParam(3, $limit, PDO::PARAM_INT);
+		}
+		else{
+			$sql = 'SELECT * FROM game WHERE player = ? ORDER BY id DESC LIMIT ?,?';
+			$req = $this->bdd->prepare($sql);
+
+			$req->bindParam(1, $id, PDO::PARAM_STR);
+			$req->bindParam(2, $start, PDO::PARAM_INT);
+			$req->bindParam(3, $limit, PDO::PARAM_INT);
+		}
 
 		$req->execute();
 

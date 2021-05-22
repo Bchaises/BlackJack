@@ -48,6 +48,25 @@
 
 						?>
 					</select>
+
+					<select name="variation" id="variation">
+						<option disabled="disabled" selected="selected">
+							<?php
+
+							if (isset($_SESSION['variation'])) {
+								echo $_SESSION['variation'];
+							}
+							else{
+								echo "--Variation--";
+							}
+
+
+							?>
+						</option>
+
+						<option value="croissant">croissant</option>
+						<option value="décroissant">décroissant</option>
+					</select>
 				</form>
 			</div>
 		</div>
@@ -86,6 +105,14 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("#limit-records").change(function(){
+			$('form').submit();
+		})
+	})
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#variation").change(function(){
 			$('form').submit();
 		})
 	})
