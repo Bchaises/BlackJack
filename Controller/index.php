@@ -52,6 +52,10 @@ if (isset($_POST['btnConnection'])) {
 	}
 }
 
+if (isset($_GET['Connection'])) {
+	$module = 'connection';
+}
+
 // inscription du joueur
 if (isset($_GET['inscription'])) {
 	$module = 'inscription';
@@ -87,7 +91,7 @@ if(isset($_SESSION['pseudo'])){
 
 // deconnexion du joueur
 if (isset($_GET['deco'])) {
-	unset($_SESSION['id'], $_SESSION['pseudo'], $_SESSION['money']);
+	unset($_SESSION['id'], $_SESSION['pseudo'], $_SESSION['money'],$_SESSION['limit-records']);
 	$module = 'accueil';
 }
 
