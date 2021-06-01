@@ -672,6 +672,7 @@ if ($module == 'profil') {
 			$fin = true;
 			break;
 		}
+		
 		$cpt++;
 	}
 }
