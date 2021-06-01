@@ -20,6 +20,8 @@ $message = '';
 $daoPlayer = new DAO_Player;
 $daoGame = new DAO_Game;
 
+
+
 // Connexion du joueur
 // vérification si le bouton a été utilisé
 if (isset($_POST['btnConnection'])) {
@@ -52,6 +54,8 @@ if (isset($_POST['btnConnection'])) {
 	}
 }
 
+
+
 if (isset($_GET['Connection'])) {
 	$module = 'connection';
 }
@@ -60,6 +64,8 @@ if (isset($_GET['Connection'])) {
 if (isset($_GET['inscription'])) {
 	$module = 'inscription';
 }
+
+
 
 // inscription de l'utilisateur
 if (isset($_POST['btnInscription'])) {
@@ -83,6 +89,8 @@ if (isset($_POST['btnInscription'])) {
 		$messageErreur = "Le formulaire n'a pas été correctement remplis !";
 	}
 }
+
+
 
 // le joueur est déjà connecté
 if(isset($_SESSION['pseudo'])){
@@ -137,6 +145,8 @@ if (isset($_GET['mise']) && !isset($_SESSION['pseudo'])) {
 	$messageErreur = "Veuillez vous connecter avant d'accéder à l'onglet \"Jouer\"";
 }
 
+
+
 // Mise
 if (isset($_POST['btnMise']) && isset($_SESSION['money'])) {
 
@@ -166,6 +176,8 @@ if (isset($_POST['btnMise']) && isset($_SESSION['money'])) {
 	}
 }
 
+
+
 // recommence la partie avec la même mise
 if (isset($_GET['recommencer']) && isset($_SESSION['money'])){
 	if ($_SESSION['money'] > 0 && $_SESSION['mise'] <= $_SESSION['money']) {
@@ -194,6 +206,8 @@ if (isset($_SESSION['money']) && isset($_SESSION['pseudo']) && isset($_SESSION['
 		$module = 'accueil';
 	}
 }
+
+
 
 // distribution des cartes pour le croupier et le joueur
 if ($module == 'distribCartes') {
@@ -285,6 +299,8 @@ if (isset($_POST['btnChoiceSubmit'])) {
 			}
 		}
 
+		
+
 		// si le bouton past/passé la main a été selectionné
 		if ($_POST['radioChoice'] == 'past' && $_SESSION['cartesC'][0] == 53) {
 			
@@ -356,7 +372,9 @@ if (isset($_POST['btnChoiceSubmit'])) {
 		}
 
 	// si la valeur est superieur ou inferieur a 21 alors fin de partie
-	}else if ($_SESSION['valueP'] == 21 || $_SESSION['valueP'] > 21) {
+	}else if ($_SESSION['valueP'] == 21) {
+		$module = 'mise';
+	}else if ($_SESSION['valueP'] > 21) {
 				$module= 'finPartie';
 	// erreur si le joueur n'a pas selectionné de choix
 	}else{
@@ -364,6 +382,8 @@ if (isset($_POST['btnChoiceSubmit'])) {
 		$module = 'game';
 	}
 }
+
+
 
 // module fin de partie
 if ($module == 'finPartie') {
@@ -447,7 +467,11 @@ if ($module == 'finPartie') {
 	$player = $daoPlayer->getByPseudo($_SESSION['pseudo']);
 	$daoGame->addGame($player->getId(),$_SESSION['mise'],$profit);
 
+
+
 }
+
+
 
 // module continuer
 if ($module == 'continuer') {
@@ -482,6 +506,8 @@ if ($module == 'distribCartes' || $module == 'game' || $module == 'finPartie') {
 		$affichageC .= '<img src="../Images/'.$_SESSION['cartesC'][$i].'.png">';
 	}
 }
+
+
 
 // permet de passer d'une page à l'autre dans l'historique
 	if (isset($_GET['page'])) {
@@ -673,6 +699,8 @@ if ($module == 'accueil') {
 	}
 }
 
+
+
 // page html
 include('../Vue/top_page.php');
 include('../Vue/header.php');
@@ -708,6 +736,8 @@ else if ($module == 'finPartie') {
 	include('../Vue/lienFin.php');
 
 	$module = 'mise';
+
+	
 }
 else if ($module == 'profil'){
 	include('../Vue/profil.php');

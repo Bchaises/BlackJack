@@ -16,9 +16,6 @@
 			<input type="radio" name="radioChoice" id="double" value="double" class="double" arial-label="Vous piochez une carte et doublez la mise" required>
 			<label name="double"   for="double" style="padding-right: 5px;">Doubler la mise <a style="text-decoration: none;color: black;" title="Double la mise et tire une carte"><img src="../Images/infobulle.png"></a></label>
 
-			<input type="radio" name="radioChoice" id="doubleGame" value="doubleGame" class="doubleGame" arial-label="si vous avez deux cartes similaires vous divisez votre paquet ainsi que votre mise" required>
-			<label name="doubleGame"   for="doubleGame">Double son jeu <a style="text-decoration: none;color: black;" title="Divise le paquet et la mise en deux si vous avez 2 cartes similaires"><img src="../Images/infobulle.png"></a></label>
-
 		</div>
 
 		<div id="choice_item_3">
