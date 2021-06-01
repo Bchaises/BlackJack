@@ -661,15 +661,18 @@ if ($module == 'profil') {
 	$players = $daoPlayer->bestPlayers();
 	$cpt = 1;
 	$rang = 0;
+	$fin = false;
 
 	foreach ($players as $player) {
 
-		$id = ($daoPlayer->getByPseudo($player['pseudo']))->getId();
-		$cpt++;
+		$id = ($daoPlayer->getByPseudo($_SESSION['pseudo']))->getId();
 
-		if($_SESSION['pseudo'] != $player['pseudo']){
+		if($player['pseudo'] == $_SESSION['pseudo']){
 			$rang = $cpt;
+			$fin = true;
+			break;
 		}
+		$cpt++;
 	}
 }
 
