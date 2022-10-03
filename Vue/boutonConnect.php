@@ -1,1 +1,0 @@
-<a href='index.php?Connection' id=connect>Connexion</a></p>
